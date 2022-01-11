@@ -1,0 +1,158 @@
+# 1. value 1개짜리 & decreased
+
+Hypoalbuminemia_G1=[3024561,'<',3.3]
+Hypoalbuminemia_G2=[3024561,'<',3]
+Hypoalbuminemia_G3=[3024561,'<',2]
+Hypokalemia_G1=[3023103,'<',3.5]
+Hypokalemia_G3=[3023103,'<',3]
+Hypokalemia_G4=[3023103,'<',2.5]
+Fibrinogen_decreased_G1=[3016407,'<',200]
+Fibrinogen_decreased_G2=[3016407,'<',150]
+Fibrinogen_decreased_G3=[3016407,'<',100]
+Fibrinogen_decreased_G4=[3016407,'<',50]
+Hypoglycemia_G1=[3004501,'<',70]
+Hypoglycemia_G2=[3004501,'<',55]
+Hypoglycemia_G3=[3004501,'<',40]
+Hypoglycemia_G4=[3004501,'<',30]
+Hypomagnesemia_G1=[3012095,'<',0.74]
+Hypomagnesemia_G2=[3012095,'<',0.5]
+Hypomagnesemia_G3=[3012095,'<',0.4]
+Hypomagnesemia_G4=[3012095,'<',0.3]
+Hyponatremia_G1=[3019550,'<',135]
+Hyponatremia_G2=[3019550,'<',130]
+Hyponatremia_G3=[3019550,'<',125]
+Hyponatremia_G4=[3019550,'<',120]
+Lymphocyte_count_decreased_G1=[3019198,'<',0.9]
+Lymphocyte_count_decreased_G2=[3019198,'<',0.8]
+Lymphocyte_count_decreased_G3=[3019198,'<',0.5]
+Lymphocyte_count_decreased_G4=[3019198,'<',0.2]
+Acidosis_arterial_G1=[3019977,'<', 7.35]
+Acidosis_arterial_G3=[3019977,'<', 7.3]
+
+# 2. value 1개짜리 & increased
+
+Hypermagnesemia_G1=[3012095,'>',1.2]
+Hypermagnesemia_G3=[3012095,'>',1.23]
+Hypermagnesemia_G4=[3012095,'>',3.3]
+Lipase_increased_G1=[3004905,'>',60]
+Lipase_increased_G2=[3004905,'>',120]
+Lipase_increased_G3=[3004905,'>',300]
+Serum_amylase_increased_G1=[3016771,'>',210]
+Serum_amylase_increased_G2=[3016771,'>',420]
+Serum_amylase_increased_G3=[3016771,'>',1050]
+Alanine_aminotransferase_increased_G1=[3006923,'>',40]
+Alanine_aminotransferase_increased_G2=[3006923,'>',120]
+Alanine_aminotransferase_increased_G3=[3006923,'>',200]
+Alanine_aminotransferase_increased_G4=[3006923,'>',800]
+Cholesterol_high_G1=[3027114,'>',200]
+Cholesterol_high_G2=[3027114,'>',300]
+Cholesterol_high_G3=[3027114,'>',400]
+Cholesterol_high_G4=[3027114,'>',500]
+Hyperkalemia_G1=[3023103,'>',5]
+Hyperkalemia_G2=[3023103,'>',5.5]
+Hyperkalemia_G3=[3023103,'>',6]
+Hyperkalemia_G4=[3023103,'>',7]
+Hypernatremia_G1=[3019550,'>',145]
+Hypernatremia_G2=[3019550,'>',150]
+Hypernatremia_G3=[3019550,'>',155]
+Hypernatremia_G4=[3019550,'>',160]
+Hypertriglyceridemia_G1=[3022192,'>',150]
+Hypertriglyceridemia_G2=[3022192,'>',300]
+Hypertriglyceridemia_G3=[3022192,'>',500]
+Hypertriglyceridemia_G4=[3022192,'>',1000]
+# NLR_abnormal = [43055369,'>=', 3]
+# PLR_abnormal = [44816673,'>=', 180]
+# NLR_G1=[43055369,'>=',6]
+# NLR_G2=[43055369,'>=',9]
+# NLR_G3=[43055369,'>=',18]
+Alkalosis_arterial_G1=[3019977,'>',7.45]
+Alkalosis_arterial_G3=[3019977,'>',7.5]
+
+# 3. concept_id 2개이상 & value 1개 & decreased
+
+hyperthyroidism = [[3019170,3009201],'<', 0.35]
+Platelet_count_decreased_G1=[[3024929,3007461],'<',150]
+Platelet_count_decreased_G2=[[3024929,3007461],'<',75]
+Platelet_count_decreased_G3=[[3024929,3007461],'<',50]
+Platelet_count_decreased_G4=[[3024929,3007461],'<',25]
+White_blood_cell_decreased_G1=[[3010813,3000905],'<',4]
+White_blood_cell_decreased_G2=[[3010813,3000905],'<',3]
+White_blood_cell_decreased_G3=[[3010813,3000905],'<',2]
+White_blood_cell_decreased_G4=[[3010813,3000905],'<',1]
+
+#4. concept_id 2개이상 & value 1개 & increased
+
+hypothyroidism=[[3019170,3009201],'>',5]
+Leukocytosis_G3=[[3010813,3000905],'>',100]
+Lymphocyte_count_increased_G2=[[3004327,3019198],'>',4]
+Lymphocyte_count_increased_G3=[[3004327,3019198],'>',20]
+Activated_partial_thromboplastin_time_prolonged_G1=[[3018677,3038102,3013466],'>',32]
+Activated_partial_thromboplastin_time_prolonged_G2=[[3018677,3038102,3013466],'>',48]
+Activated_partial_thromboplastin_time_prolonged_G3=[[3018677,3038102,3013466],'>',80]
+INR_increased_G1=[[3002417,3032080,3022217],'>',1.2]
+INR_increased_G2=[[3002417,3032080,3022217],'>',1.5]
+INR_increased_G3=[[3002417,3032080,3022217],'>',2.5]
+Aspartate_aminotransferase_increased_G1=[[3013721,3042781],'>',40]
+Aspartate_aminotransferase_increased_G2=[[3013721,3042781],'>',120]
+Aspartate_aminotransferase_increased_G3=[[3013721,3042781],'>',200]
+Aspartate_aminotransferase_increased_G4=[[3013721,3042781],'>',800]
+Blood_lactate_dehydrogenase_increased_G1=[[3034022,3022250],'>',250]
+
+#5. concept_id 3개짜리 & value 3개 & decreased
+
+Hypocalcemia_ca_G1=[[3006906,40762533,3036426],'<',[8.3,4.5,4.5]]
+Hypocalcemia_ca_G2=[[3006906,40762533,3036426],'<',[8,4,4]]
+Hypocalcemia_ca_G3=[[3006906,40762533,3036426],'<',[7,3.6,3.6]]
+Hypocalcemia_ca_G4=[[3006906,40762533,3036426],'<',[6,3.2,3.2]]
+
+#6. concept_id 2개짜리 & value 2개 & increased
+
+Hyperuricemia_24hr_urie_serum = [[3021835,3037556],'>', [750 ,7] ]
+
+#7. concept_id 3개짜리 & value 3개 & increased
+
+Hypercalcemia_ca_G1=[[3006906,40762533,3036426],'>',[10.2, 4.52, 4.52]]
+Hypercalcemia_ca_G2=[[3006906,40762533,3036426],'>',[11.5, 6, 6]]
+Hypercalcemia_ca_G3=[[3006906,40762533,3036426],'>',[12.5, 6.4, 6.4]]
+Hypercalcemia_ca_G4=[[3006906,40762533,3036426],'>',[13.5, 7.2, 7.2]]
+
+#8. Gender & 각 concept_id/value 1개 & decreased
+Anemia_sum_G1=[['F',3000963,'<',12],['M',3000963,'<',12]]
+Anemia_sum_G2=[['F',3000963,'<',10],['M',3000963,'<',10]]
+Anemia_sum_G3=[['F',3000963,'<',8],['M',3000963,'<',8]]
+
+#9. Gender & 각 concept_id/value 1개 & increased
+
+CPK_increased_sum_G1=[['F','M'],[3015620,3007220],'>',[135,245]] #cocept_id는 합집합
+CPK_increased_sum_G2=[['F','M'],[3015620,3007220],'>',[337.5,612.5]] #cocept_id는 합집합
+CPK_increased_sum_G3=[['F','M'],[3015620,3007220],'>',[675,1225]] #cocept_id는 합집합
+CPK_increased_sum_G4=[['F','M'],[3015620,3007220],'>',[1350,2450]] #cocept_id는 합집합
+
+# 10. Gender & 동일 concept_id & 각 value 1개 & decreased
+Neutrophil_count_decreased_G1=[['F','M'],[3013650,3017732],'<',[1.6,1.7]]
+Neutrophil_count_decreased_G2=[['F','M'],[3013650,3017732],'<',[1.5,1.5]]
+Neutrophil_count_decreased_G3=[['F','M'],[3013650,3017732],'<',[1.0,1.0]]
+Neutrophil_count_decreased_G4=[['F','M'],[3013650,3017732],'<',[0.5,0.5]]
+
+#11. Gender & 동일 concept_id & 각 value 1개 & increased
+Alkaline_phosphatase_increased_G1=[['F','M'],3035995,'>',[120,120]]
+Alkaline_phosphatase_increased_G2=[['F','M'],3035995,'>',[300,300]]
+Alkaline_phosphatase_increased_G3=[['F','M'],3035995,'>',[600,600]]
+Alkaline_phosphatase_increased_G4=[['F','M'],3035995,'>',[2400,2400]]
+Hemoglobin_increased_sum_G1=[['F','M'],3000963,'>',[16,16]]
+Hemoglobin_increased_sum_G2=[['F','M'],3000963,'>',[18,18]]
+Hemoglobin_increased_sum_G3=[['F','M'],3000963,'>',[20,20]]
+creatinine_increased_sum_G1=[['F','M'],3016723,'>',[1.4,1.4]]
+creatinine_increased_sum_G2=[['F','M'],3016723,'>',[2.1,2.1]]
+creatinine_increased_sum_G3=[['F','M'],3016723,'>',[4,2,4.2]]
+creatinine_increased_sum_G4=[['F','M'],3016723,'>',[8.4,8.4]]
+GGT_increased_sum_G1=[['F','M'],3026910,'>',[54,54]]
+GGT_increased_sum_G2=[['F','M'],3026910,'>',[135,135]]
+GGT_increased_sum_G3=[['F','M'],3026910,'>',[270,270]]
+GGT_increased_sum_G4=[['F','M'],3026910,'>',[1080,1080]]
+
+#12. Gender & 동일 concept_id & 각 value 1개 & increased
+Blood_bilirubin_increased_G1=[['F','M'],[3024128,3028833],'>',[1.2,1.2]]
+Blood_bilirubin_increased_G2=[['F','M'],[3024128,3028833],'>',[1.8,1.8]]
+Blood_bilirubin_increased_G3=[['F','M'],[3024128,3028833],'>',[3.6,3.6]]
+Blood_bilirubin_increased_G4=[['F','M'],[3024128,3028833],'>',[12,12]]
