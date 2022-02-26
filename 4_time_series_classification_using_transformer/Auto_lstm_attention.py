@@ -116,9 +116,9 @@ class Auto_lstm_attention():
         y_train2=y_train[:,0]
 
 
-        weights = class_weight.compute_class_weight(class_weight = 'balanced',
-                                                    classes = np.unique(y_train),
-                                                    y = y_train2)
+        weights = class_weight.compute_class_weight('balanced',
+                                                    np.unique(y_train),
+                                                    y_train2)
         weights = {i : weights[i] for i in range(2)}
         print(weights)
 
@@ -451,9 +451,9 @@ class Auto_lstm_attention():
             y1_train, y1_test = y[train_index], y[test_index]
 
             y_train2 = y1_train[:,0]
-            weights = class_weight.compute_class_weight(class_weight = 'balanced',
-                                                    classes = np.unique(y1_train),
-                                                    y = y_train2)
+            weights = class_weight.compute_class_weight('balanced',
+                                                        np.unique(y1_train),
+                                                        y_train2)
             weights = {i : weights[i] for i in range(2)}
             #print(weights)
 

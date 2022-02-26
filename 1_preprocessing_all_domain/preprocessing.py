@@ -19,20 +19,19 @@ from sklearn.metrics import auc
 import warnings
 warnings.filterwarnings(action='ignore')
 
-def cohortConditionSetting(domain_df):
+def cohortConditionSetting(domain_df, observation_period = 60, interesting_period = 60):
     from datetime import timedelta
     prev_len = len(domain_df)
     domain_df['cohort_start_date'] = pd.to_datetime(domain_df['cohort_start_date'], format='%Y-%m-%d %H:%M:%S', errors='raise')
     domain_df['first_abnormal_date'] = pd.to_datetime(domain_df['first_abnormal_date'], format='%Y-%m-%d %H:%M:%S', errors='raise')
     domain_df['concept_date'] = pd.to_datetime(domain_df['concept_date'], format='%Y-%m-%d %H:%M:%S', errors='raise')
     # condition 1) Select patients with first adverse events within 6 months of cohort initiation.
-    domain_df = domain_df[~(domain_df['first_abnormal_date']-domain_df['cohort_start_date']>timedelta(days=180))]
-    # condition 2) Delete data before the cohort start date.
-    domain_df = domain_df[(domain_df['cohort_start_date']<=domain_df['concept_date'])] # doesn't exist
+    domain_df = domain_df[~(domain_df['first_abnormal_date']-domain_df['cohort_start_date']>timedelta(days=interesting_period))]
+    domain_df = domain_df[(domain_df['cohort_start_date']-domain_df['concept_date']<timedelta(days=observation_period))]
     # condition 3) Delete data after first_abnormal_date (Except when there is no first abnormal date.)
     domain_df = domain_df[~(domain_df['first_abnormal_date']<domain_df['concept_date'])]
     # condition 4) Delete data after 6 months from the start date of the cohort
-    domain_df = domain_df[(domain_df['concept_date']-domain_df['cohort_start_date']<timedelta(days=180))]
+    domain_df = domain_df[(domain_df['concept_date']-domain_df['cohort_start_date']<timedelta(days=interesting_period))]
     # condition 5) f, female = 0 / m, male = 1
     domain_df['sex'].replace(['F', 'Female'], 0, inplace=True)
     domain_df['sex'].replace(['M', 'Male'], 1, inplace=True)
@@ -149,9 +148,9 @@ def variant_selection_paired_t_test(domain_df):
     domain_df['first_abnormal_date'] = pd.to_datetime(domain_df['first_abnormal_date'], format='%Y-%m-%d %H:%M:%S', errors='raise')
     domain_df["concept_date"] = pd.to_datetime(domain_df["concept_date"], format='%Y-%m-%d %H:%M:%S', errors='raise')
     total_idx = domain_df.index
-    # measurement_data + 28 < first_abnormal_date
+    # measurement_data + 7 < first_abnormal_date
     IO_start=domain_df[domain_df["concept_date"]<domain_df["first_abnormal_date"]]
-    IO_start=IO_start[IO_start["first_abnormal_date"]-IO_start["concept_date"]>=timedelta(days=28)] # 4ws
+    IO_start=IO_start[IO_start["first_abnormal_date"]-IO_start["concept_date"]>=timedelta(days=7)] # 4ws
     IO_start_idx=IO_start.index
     
     # # 전체에서 IO_Start 빼기
@@ -198,18 +197,18 @@ def day_sequencing_interpolate(pivot_data, domain_ids):
 
     for subject_id, group_df in data.groupby(['subject_id']):
         
-        # 4) less than 28 days of data
+        # 4) less than 7 days of data
         train_min = pd.to_datetime( group_df['concept_date'].min() ) #last train date
         train_max = pd.to_datetime( group_df['concept_date'].max() ) #last train date
         first_abnormal_date_max = pd.to_datetime( group_df['first_abnormal_date'].max() ) #last train date
         
-        OBP = 28
+        OBP = 7
         #print(train_min, train_max, train_max - train_min) 
         if train_min == train_max :
             # 4-1) only first abnormal date
             #print(subject_id, train_min, train_max, first_abnormal_date_max)
             pass
-        elif train_min > train_max-timedelta(days=OBP-1): # ex. 2/28 - 27day = 2/1
+        elif train_min > train_max-timedelta(days=OBP-1): # ex. 2/28 - 7day = 2/21
             # 4-1) create data index
             #group_df.loc[train_max-timedelta(days=OBP-1)] = None
             group_df.loc[train_max-timedelta(days=OBP)] = None
@@ -282,7 +281,7 @@ def label_0_fitting(input_df, OBP, nShift, uid_index):
     # 2) slice data by subject id
     for subject_id, group_df in input_df.groupby(['subject_id']):
         # 3) slice data by shift n days (maximun 6 months)
-        for i in range(0, 180, nShift):
+        for i in range(0, 60, nShift):
             slice_df = group_df.shift(i).tail(OBP)
             # 4) if has nan data break.
             if OBP != len(slice_df):
