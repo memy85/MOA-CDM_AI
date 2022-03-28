@@ -4,7 +4,6 @@ import datetime
 import re
 import os
 import pandas as pd
-import numpy as np
 import pymssql
 from statsmodels.stats.contingency_tables import mcnemar
 from datetime import timedelta
@@ -13,9 +12,7 @@ from collections import defaultdict
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import make_moons
 from matplotlib import pyplot
-from sklearn.metrics import classification_report
-from sklearn.metrics import roc_curve
-from sklearn.metrics import auc
+from sklearn.metrics import classification_report, roc_curve, auc
 import warnings
 warnings.filterwarnings(action='ignore')
 
@@ -39,7 +36,6 @@ def cohortConditionSetting(domain_df, pre_observation_period, post_observation_p
 
 def variant_selection_welch_t_test(domain_df):
     import scipy.stats
-    import numpy as np
     concept_dict = dict(zip(domain_df.concept_id, domain_df.concept_name))
     domain_df = domain_df.query("concept_date <= cohort_start_date")
     domain_df = domain_df.sort_values(by=['person_id', 'concept_id', 'concept_date'], ascending=[True, True, False]) # last date 값만 사용 
@@ -73,7 +69,6 @@ def variant_selection_welch_t_test(domain_df):
 
 def variant_selection_chisquare(domain_df):
     import scipy.stats
-    import numpy as np
     domain_df = domain_df.query("concept_date <= cohort_start_date")
     concept_dict = dict(zip(domain_df.concept_id, domain_df.concept_name))
     domain_df = domain_df[["concept_id", "person_id", "label"]].drop_duplicates()
@@ -240,14 +235,17 @@ def average_duration_of_adverse_events(df):
 
 
 def pivotting(all_domain_df):    
+    all_domain_df['cohort_start_date'] = pd.to_datetime(all_domain_df['cohort_start_date'], format='%Y-%m-%d %H:%M:%S', errors='raise')
+    all_domain_df['first_abnormal_date'] = pd.to_datetime(all_domain_df['first_abnormal_date'], format='%Y-%m-%d %H:%M:%S', errors='raise')
+    all_domain_df['concept_date'] = pd.to_datetime(all_domain_df['concept_date'], format='%Y-%m-%d %H:%M:%S', errors='raise')
     all_domain_df = all_domain_df.fillna('1970-01-01') # 
     common_columns = ['person_id','age','sex','cohort_start_date','concept_date','first_abnormal_date','label']
     # pivotting 
     pivot_data = pd.pivot_table(all_domain_df, index = common_columns, columns = ['concept_id'], values = 'concept_value')
     pivot_data = pivot_data.sort_values(by=["person_id","concept_date"],axis=0).reset_index()
-
     #pivot_data = pivot_data.fillna(0) ####### 뒤에 days_diff 때문에 fill_na(0) 이 안됨
     pivot_data = pivot_data.fillna(pivot_data.groupby(['person_id']).ffill())
+    pivot_data = pivot_data.drop_duplicates()
     pivot_data = pivot_data.rename_axis(None, axis=1)
     return pivot_data
 
@@ -425,9 +423,9 @@ def get_matching_pairs(label1_df, label0_df, scaler=True):
         label1_x = scaler.transform(label1_x)
         label0_x = scaler.transform(label0_x)
         
-    nbrs = NearestNeighbors(n_neighbors=5, algorithm="auto").fit(label0_x)
+    nbrs = NearestNeighbors(n_neighbors=3, algorithm="auto").fit(label0_x)
     distance, indices = nbrs.kneighbors(label1_x)
     # print(indices.shape)
-    indices = indices.reshape(indices.shape[0]*5)
+    indices = indices.reshape(indices.shape[0]*3)
     matched = label0_df.iloc[indices]
     return matched

@@ -84,10 +84,10 @@ class Auto_lstm_attention():
         x = LSTM(20, return_sequences=True)(xInput)
         #x = Bidirectional(LSTM(10))(x)
 
-        Bidirectional(LSTM(10,activation='relu',implementation=2,
-                                           return_sequences=True,
-                                           kernel_initializer='glorot_uniform'),
-                                 activity_regularizer=regularizers.l2(0.01))
+        # Bidirectional(LSTM(10,activation='relu',implementation=2,
+        #                                    return_sequences=True,
+        #                                    kernel_initializer='glorot_uniform'),
+        #                          activity_regularizer=regularizers.l2(0.01))
 
         x = Attention(10)(x)
         x = Dense(1)(x)
@@ -124,6 +124,8 @@ class Auto_lstm_attention():
 
         with open('{}/{}_class_weight.txt'.format(output_domain_path,outcome_name),'w',encoding='UTF-8') as f:
             f.write(str(weights))
+        
+        self.class_weight = weights
             
         return weights
     
@@ -134,13 +136,15 @@ class Auto_lstm_attention():
         y_train = self.y_train
         x_test = self.x_test
         y_test = self.y_test
+        class_weight = self.class_weight
         es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=100)
         
         # Early stopping 객체에 의해 training 이 중지되었을 때, 그 상태가 이전 모델에 비해 validation error 가 높은 상태 일 수 있음.
         # 따라서 가장 validation performance 가 좋은 모델을 저장하는 것이 필요한데, 이를 위해 ModelCheckPoint 사용
         mc = ModelCheckpoint('best_model.h5', monitor='val_loss', mode='min', save_best_only=True)
         h=model.fit(x_train, y_train, epochs=300,  #############################################################################
-                         batch_size=28, verbose=1, validation_split=0.1,   
+                         batch_size=28, verbose=1, validation_split=0.1,
+                         class_weight=class_weight,
                          callbacks=[es,mc])  # callbacks=[es,mc,visualize]
         y_hat = model.predict(x_test, batch_size=28)
         self.y_hat =  y_hat

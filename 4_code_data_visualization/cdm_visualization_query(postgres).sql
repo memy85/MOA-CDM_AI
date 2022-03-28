@@ -23,7 +23,7 @@ group by unit_concept_id, unit_source_value
 DROP TABLE IF EXISTS temp_meas;
 
 select distinct person_id, measurement_concept_id, measurement_date, value_as_number, unit_concept_id
-into temp_meas
+into temp temp_meas
 from cdm.dbo.measurement 
 where measurement_concept_id = 3013721																		-- (concept_id ¼öÁ¤)
 
@@ -53,7 +53,7 @@ WHERE b.person_id IS NULL;
 -- 3. 																		
 DROP TABLE IF EXISTS temp_person;
 
-select m.person_id, m.measurement_concept_id, m.value_as_number, p.gender_source_value, (YEAR(m.measurement_date)-p.year_of_birth) as age, p.year_of_birth, m.measurement_date
+select m.person_id, m.measurement_concept_id, m.value_as_number, p.gender_source_value, (date_part('year', m.measurement_date)-p.year_of_birth) as age, p.year_of_birth, m.measurement_date
 into temp temp_person
 from (
 	(select * from temp_meas_group) as m

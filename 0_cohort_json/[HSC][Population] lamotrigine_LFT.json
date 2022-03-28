@@ -411,7 +411,7 @@
       "name": "(X) Abnormal_LFT",
       "expression": {
         "Type": "AT_LEAST",
-        "Count": 1,
+        "Count": 0,
         "CriteriaList": [
           {
             "Criteria": {

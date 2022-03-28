@@ -25,11 +25,12 @@
 4_code_data_visualization
    - CDM 데이터 품질 확인 
    - Lab Test 별 Age, sex별 Lab value 분포 확인 
+   - .\4_code_data_visualization\README.md 참고
    - .\4_code_data_visualization\cdm_visualization_query.sql
    - .\4_code_data_visualization\0_data_visualization.ipynb 실행
-
-결과 확인
+   
+5_결과 확인
    - data (모델 생성을 위한 데이터 저장)
    - result (결과 추출을 위한 데이터 저장)
 
-: result 폴더만 압축해서 전달 요청
+: result 폴더만 압축하여 전달 요청드립니다.

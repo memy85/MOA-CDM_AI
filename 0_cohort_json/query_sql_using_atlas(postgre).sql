@@ -31,7 +31,7 @@ select *
 into temp temp_person
 from temp_cohort
 left join CDM.dbo.person
-on #temp_cohort.subject_id = CDM.dbo.person.person_id
+on temp_cohort.subject_id = CDM.dbo.person.person_id
 
 -- 2-1. subject_id, cohort_start_date, first_abnormal_date, age, gender_source_value
 if OBJECT_ID('temp.dbo.person_meloxicam') IS NOT NULL															---- (table name ¼öÁ¤)
