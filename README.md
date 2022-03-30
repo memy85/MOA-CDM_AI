@@ -2,6 +2,9 @@
 ### 간독성 / 신독성 예측 모델 
 
 순서 
+config.json 파일 수정
+	- DBMS Setting 
+	- concept ID 확인
 
 0_cohort_json
    - Atlas에서 Cohort 생성 

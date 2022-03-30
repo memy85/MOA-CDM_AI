@@ -61,7 +61,7 @@ def variant_selection_welch_t_test(domain_df):
         # result = scipy.stats.chi2_contingency(np.array([[nConcept_0, nConcept_1], [ndiff_0, ndiff_1]]))
         statistic, pvalue = scipy.stats.ttest_ind(normal_df["concept_value"], abnormal_df["concept_value"], equal_var=False)    
         # pvalue = result[1]
-        if pvalue < 0.05 and len(group_df) > nTotalPatient * 0.3 :
+        if pvalue < 0.05 : #and len(group_df) > nTotalPatient * 0.3 :
             var_temp = {}
             var_temp['concept_id'] = concept_id
             var_temp['concept_name'] = concept_dict[concept_id]
@@ -96,7 +96,7 @@ def variant_selection_chisquare(domain_df):
         # print(n_prev, n_post, nConcept_0, nConcept_1)
         result = scipy.stats.chi2_contingency(np.array([[nConcept_0, nConcept_1], [ndiff_0, ndiff_1]]))
         pvalue = result[1]
-        if pvalue < 0.05 and len(group_df) > nTotalPatient * 0.3 :
+        if pvalue < 0.05 : #and len(group_df) > nTotalPatient * 0.3 :
             var_temp = {}
             var_temp['concept_id'] = concept_id
             var_temp['concept_name'] = concept_dict[concept_id]

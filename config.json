@@ -1,0 +1,17 @@
+{
+    "working_date":"20220401",
+    "sql":{
+        "server":"111.111.111.111",
+        "user":"user",
+        "password":"password",
+        "port":22,
+        "database":"database"
+    },
+    "concept":{
+        "AST":3013721,
+        "ALT":3006926,
+        "ALP":3000963,
+        "TBL":3024128,
+        "CR":3016723
+    }
+}

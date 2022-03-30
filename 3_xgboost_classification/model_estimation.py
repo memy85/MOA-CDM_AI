@@ -53,21 +53,22 @@ def get_clf_eval(y_test, y_pred=None, pred_proba=None):
     print("f1score", '{:.3%}'.format(result['f1score']))
     print("roc_auc", '{:.3%}'.format(result['roc_auc']))
 
-    # def class_balance_weight(self, output_domain_path, outcome_name, y_train):
-        # #클래스 불균형 하에서 모델은 1보다 0이 훨씬 더 많습니다. 또한 그렇게함으로써 훈련 손실을 최소화 할 수 있기 때문에 1보다 더 많은 0을 예측하는 방법을 배웁니다.
-        # #클래스 가중치를 사용하는 목적은 손실 함수를 변경하여 "쉬운 솔루션"(즉, 0 예측)으로 훈련 손실을 최소화 할 수 없도록하는 것이므로 1에 더 높은 가중치를 사용하는 것이 좋습니다.
-        # #가중치를 설정하는 방법은, 만약 A : B = 3 : 1이면 A에 1을, B에 3을 곱해주는 식으로 데이터 구성비의 역을 곱해주는 것이 합리적이다
-        # # 차원 변경 해줘야 함
-        # y_train2=y_train[:,0]
-        # weights = class_weight.compute_class_weight(class_weight = 'balanced',
-                                                    # classes = np.unique(y_train),
-                                                    # y = y_train2)
-        # weights = {i : weights[i] for i in range(2)}
-        # print(weights)
-        # with open('{}/{}_class_weight.txt'.format(output_domain_path,outcome_name),'w',encoding='UTF-8') as f:
-            # f.write(str(weights))
-            
-        # return weights
+def class_balance_weight(output_domain_path, outcome_name, y_train):
+    #클래스 불균형 하에서 모델은 1보다 0이 훨씬 더 많습니다. 또한 그렇게함으로써 훈련 손실을 최소화 할 수 있기 때문에 1보다 더 많은 0을 예측하는 방법을 배웁니다.
+    #클래스 가중치를 사용하는 목적은 손실 함수를 변경하여 "쉬운 솔루션"(즉, 0 예측)으로 훈련 손실을 최소화 할 수 없도록하는 것이므로 1에 더 높은 가중치를 사용하는 것이 좋습니다.
+    #가중치를 설정하는 방법은, 만약 A : B = 3 : 1이면 A에 1을, B에 3을 곱해주는 식으로 데이터 구성비의 역을 곱해주는 것이 합리적이다
+    # 차원 변경 해줘야 함
+    # y_train2=y_train[:,0]
+    weights = class_weight.compute_class_weight(class_weight = 'balanced',
+                                                classes = np.unique(y_train),
+                                                y = y_train)
+    weights = {i : weights[i] for i in range(2)}
+    print(weights)
+    with open('{}/{}_class_weight.txt'.format(output_domain_path,outcome_name),'w',encoding='UTF-8') as f:
+        f.write(str(weights))
+        
+    return weights
+
 def make_plot_tree(xgb_model, output_domain_path, outcome_name, rankdir=None):
     import xgboost as xgb
     xgb.plot_tree(xgb_model, num_trees=0, rankdir=rankdir)
