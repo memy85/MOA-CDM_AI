@@ -85,7 +85,7 @@
       }
     },
     {
-      "id": 8,
+      "id": 9,
       "name": "valproate acid_2202",
       "expression": {
         "items": [
@@ -96,8 +96,10 @@
               "CONCEPT_ID": 42377469,
               "CONCEPT_NAME": "sodium valproate 0.15g",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
               "VOCABULARY_ID": "EDI"
             }
           },
@@ -108,7 +110,8 @@
               "CONCEPT_ID": 745466,
               "CONCEPT_NAME": "valproate",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -121,7 +124,92 @@
               "CONCEPT_ID": 40989613,
               "CONCEPT_NAME": "Valproate 150 MG Extended Release Oral Tablet",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Quant Branded Drug",
+              "CONCEPT_CODE": "OMOP4645879",
+              "CONCEPT_ID": 42919003,
+              "CONCEPT_NAME": "150 ML Valproate 60 MG/ML Oral Suspension [ORFIL]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Quant Branded Drug",
+              "CONCEPT_CODE": "OMOP4648462",
+              "CONCEPT_ID": 42921639,
+              "CONCEPT_NAME": "3 ML Valproate 100 MG/ML Injectable Solution [ORFIL]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4658466",
+              "CONCEPT_ID": 42931710,
+              "CONCEPT_NAME": "Valproate 125 MG Oral Capsule [DEPAKOTE SPRINKLE]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4658483",
+              "CONCEPT_ID": 42931726,
+              "CONCEPT_NAME": "Valproate 300 MG Extended Release Oral Tablet [ORFIL]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4658499",
+              "CONCEPT_ID": 42931742,
+              "CONCEPT_NAME": "Valproate 500 MG Extended Release Oral Tablet [DEPAKINE CHRONO]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4658506",
+              "CONCEPT_ID": 42931750,
+              "CONCEPT_NAME": "Valproate 600 MG Extended Release Oral Tablet [ORFIL]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm Extension"
@@ -135,7 +223,7 @@
     "CriteriaList": [
       {
         "DrugExposure": {
-          "CodesetId": 8
+          "CodesetId": 9
         }
       }
     ],

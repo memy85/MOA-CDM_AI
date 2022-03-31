@@ -85,93 +85,7 @@
       }
     },
     {
-      "id": 9,
-      "name": "lamotrigine_2202",
-      "expression": {
-        "items": [
-          {
-            "concept": {
-              "CONCEPT_CLASS_ID": "Ingredient",
-              "CONCEPT_CODE": "28439",
-              "CONCEPT_ID": 705103,
-              "CONCEPT_NAME": "lamotrigine",
-              "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT": "S",
-              "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "RxNorm"
-            }
-          },
-          {
-            "concept": {
-              "CONCEPT_CLASS_ID": "Clinical Drug",
-              "CONCEPT_CODE": "198427",
-              "CONCEPT_ID": 705108,
-              "CONCEPT_NAME": "lamotrigine 100 MG Oral Tablet",
-              "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT": "S",
-              "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "RxNorm"
-            }
-          },
-          {
-            "concept": {
-              "CONCEPT_CLASS_ID": "Clinical Drug",
-              "CONCEPT_CODE": "311264",
-              "CONCEPT_ID": 705160,
-              "CONCEPT_NAME": "lamotrigine 25 MG Chewable Tablet",
-              "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT": "S",
-              "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "RxNorm"
-            }
-          },
-          {
-            "concept": {
-              "CONCEPT_CLASS_ID": "Clinical Drug",
-              "CONCEPT_CODE": "282401",
-              "CONCEPT_ID": 19069199,
-              "CONCEPT_NAME": "lamotrigine 25 MG Oral Tablet",
-              "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT": "S",
-              "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "RxNorm"
-            }
-          },
-          {
-            "concept": {
-              "CONCEPT_CLASS_ID": "Clinical Drug",
-              "CONCEPT_CODE": "311265",
-              "CONCEPT_ID": 705161,
-              "CONCEPT_NAME": "lamotrigine 5 MG Chewable Tablet",
-              "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT": "S",
-              "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "RxNorm"
-            }
-          },
-          {
-            "concept": {
-              "CONCEPT_CLASS_ID": "Clinical Drug",
-              "CONCEPT_CODE": "199322",
-              "CONCEPT_ID": 705152,
-              "CONCEPT_NAME": "lamotrigine 50 MG Oral Tablet",
-              "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT": "S",
-              "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "RxNorm"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "id": 10,
+      "id": 11,
       "name": "valproate acid_2202",
       "expression": {
         "items": [
@@ -209,6 +123,90 @@
               "CONCEPT_CODE": "OMOP2187575",
               "CONCEPT_ID": 40989613,
               "CONCEPT_NAME": "Valproate 150 MG Extended Release Oral Tablet",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Quant Branded Drug",
+              "CONCEPT_CODE": "OMOP4645879",
+              "CONCEPT_ID": 42919003,
+              "CONCEPT_NAME": "150 ML Valproate 60 MG/ML Oral Suspension [ORFIL]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Quant Branded Drug",
+              "CONCEPT_CODE": "OMOP4648462",
+              "CONCEPT_ID": 42921639,
+              "CONCEPT_NAME": "3 ML Valproate 100 MG/ML Injectable Solution [ORFIL]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4658466",
+              "CONCEPT_ID": 42931710,
+              "CONCEPT_NAME": "Valproate 125 MG Oral Capsule [DEPAKOTE SPRINKLE]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4658483",
+              "CONCEPT_ID": 42931726,
+              "CONCEPT_NAME": "Valproate 300 MG Extended Release Oral Tablet [ORFIL]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4658499",
+              "CONCEPT_ID": 42931742,
+              "CONCEPT_NAME": "Valproate 500 MG Extended Release Oral Tablet [DEPAKINE CHRONO]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4658506",
+              "CONCEPT_ID": 42931750,
+              "CONCEPT_NAME": "Valproate 600 MG Extended Release Oral Tablet [ORFIL]",
               "DOMAIN_ID": "Drug",
               "INVALID_REASON": "V",
               "INVALID_REASON_CAPTION": "Valid",
@@ -302,7 +300,7 @@
           {
             "Criteria": {
               "DrugExposure": {
-                "CodesetId": 10
+                "CodesetId": 11
               }
             },
             "StartWindow": {

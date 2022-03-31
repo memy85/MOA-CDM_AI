@@ -85,7 +85,7 @@
       }
     },
     {
-      "id": 9,
+      "id": 10,
       "name": "lamotrigine_2202",
       "expression": {
         "items": [
@@ -96,7 +96,8 @@
               "CONCEPT_ID": 705103,
               "CONCEPT_NAME": "lamotrigine",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -109,7 +110,8 @@
               "CONCEPT_ID": 705108,
               "CONCEPT_NAME": "lamotrigine 100 MG Oral Tablet",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -122,7 +124,8 @@
               "CONCEPT_ID": 705160,
               "CONCEPT_NAME": "lamotrigine 25 MG Chewable Tablet",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -135,7 +138,8 @@
               "CONCEPT_ID": 19069199,
               "CONCEPT_NAME": "lamotrigine 25 MG Oral Tablet",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -148,7 +152,8 @@
               "CONCEPT_ID": 705161,
               "CONCEPT_NAME": "lamotrigine 5 MG Chewable Tablet",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -161,10 +166,95 @@
               "CONCEPT_ID": 705152,
               "CONCEPT_NAME": "lamotrigine 50 MG Oral Tablet",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "105017",
+              "CONCEPT_ID": 19006206,
+              "CONCEPT_NAME": "lamotrigine 50 MG Oral Tablet [Lamictal]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "105018",
+              "CONCEPT_ID": 19006207,
+              "CONCEPT_NAME": "lamotrigine 100 MG Oral Tablet [Lamictal]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "105019",
+              "CONCEPT_ID": 19006208,
+              "CONCEPT_NAME": "lamotrigine 25 MG Oral Tablet [Lamictal]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "201239",
+              "CONCEPT_ID": 19024856,
+              "CONCEPT_NAME": "lamotrigine 5 MG Chewable Tablet [Lamictal]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4689745",
+              "CONCEPT_ID": 42963260,
+              "CONCEPT_NAME": "lamotrigine 100 MG Oral Tablet [LABICITIN]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4689755",
+              "CONCEPT_ID": 42963270,
+              "CONCEPT_NAME": "lamotrigine 50 MG Oral Tablet [LABICITIN]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
             }
           }
         ]
@@ -252,7 +342,7 @@
           {
             "Criteria": {
               "DrugExposure": {
-                "CodesetId": 9
+                "CodesetId": 10
               }
             },
             "StartWindow": {

@@ -22,7 +22,7 @@
       }
     },
     {
-      "id": 6,
+      "id": 7,
       "name": "meloxicam",
       "expression": {
         "items": [
@@ -33,7 +33,8 @@
               "CONCEPT_ID": 19103398,
               "CONCEPT_NAME": "meloxicam 7.5 MG Oral Capsule",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -46,7 +47,8 @@
               "CONCEPT_ID": 1150345,
               "CONCEPT_NAME": "meloxicam",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -59,7 +61,8 @@
               "CONCEPT_ID": 19103397,
               "CONCEPT_NAME": "meloxicam 15 MG Oral Capsule",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -72,8 +75,10 @@
               "CONCEPT_ID": 42374544,
               "CONCEPT_NAME": "meloxicam 15mg",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
               "VOCABULARY_ID": "EDI"
             }
           },
@@ -84,9 +89,39 @@
               "CONCEPT_ID": 42374456,
               "CONCEPT_NAME": "meloxicam 7.5mg",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
               "VOCABULARY_ID": "EDI"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4679132",
+              "CONCEPT_ID": 42952570,
+              "CONCEPT_NAME": "meloxicam 7.5 MG Oral Capsule [MELAX]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4679258",
+              "CONCEPT_ID": 42952694,
+              "CONCEPT_NAME": "meloxicam 15 MG Oral Capsule [MELAX]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
             }
           }
         ]
@@ -97,7 +132,7 @@
     "CriteriaList": [
       {
         "DrugExposure": {
-          "CodesetId": 6
+          "CodesetId": 7
         }
       }
     ],

@@ -22,7 +22,7 @@
       }
     },
     {
-      "id": 5,
+      "id": 6,
       "name": "celecoxib_2202",
       "expression": {
         "items": [
@@ -33,7 +33,8 @@
               "CONCEPT_ID": 1118084,
               "CONCEPT_NAME": "celecoxib",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -46,8 +47,10 @@
               "CONCEPT_ID": 42379539,
               "CONCEPT_NAME": "celecoxib 0.1g",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
-              "STANDARD_CONCEPT_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "N",
+              "STANDARD_CONCEPT_CAPTION": "Non-Standard",
               "VOCABULARY_ID": "EDI"
             }
           },
@@ -58,7 +61,8 @@
               "CONCEPT_ID": 19029024,
               "CONCEPT_NAME": "celecoxib 100 MG Oral Capsule",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -71,7 +75,8 @@
               "CONCEPT_ID": 19029025,
               "CONCEPT_NAME": "celecoxib 200 MG Oral Capsule",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
@@ -84,10 +89,95 @@
               "CONCEPT_ID": 19107261,
               "CONCEPT_NAME": "celecoxib 200 MG Oral Tablet",
               "DOMAIN_ID": "Drug",
-              "INVALID_REASON_CAPTION": "Unknown",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
               "VOCABULARY_ID": "RxNorm"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "213468",
+              "CONCEPT_ID": 1118087,
+              "CONCEPT_NAME": "celecoxib 100 MG Oral Capsule [Celebrex]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "213469",
+              "CONCEPT_ID": 1118088,
+              "CONCEPT_NAME": "celecoxib 200 MG Oral Capsule [Celebrex]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "352314",
+              "CONCEPT_ID": 1118113,
+              "CONCEPT_NAME": "celecoxib 400 MG Oral Capsule [Celebrex]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4654076",
+              "CONCEPT_ID": 42927269,
+              "CONCEPT_NAME": "celecoxib 200 MG Oral Tablet [CELEWON]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4654153",
+              "CONCEPT_ID": 42927347,
+              "CONCEPT_NAME": "celecoxib 200 MG Oral Capsule [BEARCOXIB]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
+            }
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Branded Drug",
+              "CONCEPT_CODE": "OMOP4654159",
+              "CONCEPT_ID": 42927353,
+              "CONCEPT_NAME": "celecoxib 200 MG Oral Capsule [CELCIB]",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm Extension"
             }
           }
         ]
@@ -98,7 +188,7 @@
     "CriteriaList": [
       {
         "DrugExposure": {
-          "CodesetId": 5
+          "CodesetId": 6
         }
       }
     ],
