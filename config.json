@@ -1,17 +1,61 @@
 {
-    "working_date":"20220401",
-    "sql":{
-        "server":"111.111.111.111",
-        "user":"user",
-        "password":"password",
-        "port":22,
-        "database":"database"
+    "working_date": "20220418",
+    "dbms": "postgresql",
+    "mssql": {
+        "@server": "111.111.111.111",
+        "@user": "user",
+        "@password": "password",
+        "@port": 5432,
+        "@database": "CDM",
+        "@cdm_database_schema": "CDM.dbo",
+        "@person_database_schema": "temp.dbo"
     },
-    "concept":{
-        "AST":3013721,
-        "ALT":3006926,
-        "ALP":3000963,
-        "TBL":3024128,
-        "CR":3016723
+    "postgresql": {
+        "@server": "111.111.111.111",
+        "@user": "user",
+        "@password": "password",
+        "@port": 5432,
+        "@database": "CDM",
+        "@cdm_database_schema": "CDM.dbo",
+        "@person_database_schema": "temp.dbo"
+    },
+    "meas": {
+        "AST": { "@meas_concept_id": "3013721" },
+        "ALT": { "@meas_concept_id": "3006926" },
+        "ALP": { "@meas_concept_id": "3000963" },
+        "TB": { "@meas_concept_id": "3024128" },
+        "CR": { "@meas_concept_id": "3016723" },
+        "PT_INR": { "@meas_concept_id": "3022217" }
+    },
+    "drug": {
+        "meloxicam": { "interest_abnormal": "nephrotoxicity", "drug_target_cohort_id": "99001" },
+        "celecoxib": { "interest_abnormal": "nephrotoxicity", "drug_target_cohort_id": "99002" },
+        "valproic_acid": { "interest_abnormal": "hepatotoxicity", "drug_target_cohort_id": "99003" },
+        "lamotrigine": { "interest_abnormal": "hepatotoxicity", "drug_target_cohort_id": "99004" }
+    },
+    "translatequerysql":{
+        "../_sql/atlas_cohort/insert_cohort_table_{drug}_{dbms}.sql":{
+            "@cdm_database_schema": "CDM.dbo",
+            "@target_database_schema": "WEBAPI.dbo",
+            "@target_cohort_table": "cohort",
+            "@vocabulary_database_schema": "CDM.dbo",
+            "@target_cohort_id": "{drug_target_cohort_id}"
+        },
+        "../_sql/person_drug/create_table_person_drug_{dbms}.sql":{
+            "@cdm_database_schema": "CDM.dbo",
+            "@cohort_database_schema": "WEBAPI.dbo",
+            "@target_cohort_table": "cohort",
+            "@target_database_schema": "temp.dbo",
+            "@target_person_table":"person_{drug}",
+            "@target_cohort_id": "{drug_target_cohort_id}"
+        }
+    },
+    "translatequerysql2":{
+        "../_sql/person_meas/create_table_person_meas_{dbms}.sql":{
+            "@cdm_database_schema": "CDM.dbo",
+            "@target_measurement_concept_id": "{@meas_concept_id}",
+            "@target_database_schema": "temp.dbo",
+            "@target_person_table": "person_{meas}"
+        }
     }
 }

@@ -1,11 +1,8 @@
-1_preprocessing_all_domain/__pycache__/
-2_lstm_attention_all_domain/best_model.h5
-2_lstm_attention_all_domain/__pycache__/
-3_xgboost_classification/imxgboost/__pycache__
-4_time_series_classification_using_transformer/__pycache__/
 venv_lstm/
+venv/
 data/
 result/
+.idea/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
