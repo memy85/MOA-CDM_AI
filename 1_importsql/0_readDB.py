@@ -211,10 +211,10 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             _2times = 2
             _1_5times = 1.5
 
-            concept_id_AST = cfg['measurement']["AST"]
-            concept_id_ALT = cfg['measurement']["ALT"]
-            concept_id_ALP = cfg['measurement']["ALP"]
-            concept_id_TB = cfg['measurement']["TB"]
+            concept_id_AST = cfg['meas']["AST"]
+            concept_id_ALT = cfg['meas']["ALT"]
+            concept_id_ALP = cfg['meas']["ALP"]
+            concept_id_TB = cfg['meas']["TB"]
 
             def extraction_of_past_abnormalities(domain_df, concept_id, value):
                 n_prev_data = len(domain_df)
@@ -292,7 +292,7 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             _2times = 2
             _1_5times = 1.5
 
-            concept_id_CR = cfg['measurement']["CR"]
+            concept_id_CR = cfg['meas']["CR"]
 
             def extraction_of_past_abnormalities(domain_df, concept_id, value):
                 n_prev_data = len(domain_df)

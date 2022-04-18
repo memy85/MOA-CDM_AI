@@ -17,11 +17,11 @@ An in-depth paragraph about your project and overview of use.
 │  └─0_readDB.py
 ├─2_preprocessing_xgboost
 │  └─0_preprocessing_xgboost.py
-├─2_preprocessing_lstm
-│  └─0_preprocessing_lstm.py
 ├─3_xgboost_classification
 │  └─0_xgboost.py
-├─4_bi-lstm_attention_classification
+├─4_preprocessing_lstm
+│  └─0_preprocessing_lstm.py
+├─5_bi-lstm_attention_classification
 │  └─0_lstm_attention.py
 ├─9_code_data_visualization
 │  └─0_data_visualization.py
@@ -64,6 +64,10 @@ and
 graphviz install (https://graphviz.org/download/)
 - Check installation
   : cmd or terminal > "dot -V"
+
+and 
+
+pip install psycopg2-binary
 
 ## Getting Started
 
