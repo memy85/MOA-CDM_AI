@@ -109,7 +109,7 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         concept_proc_df = pd.read_sql(sql=sql_query, con=conn)
         sql_query="select distinct concept_id, concept_name from {} ".format(tnConcept) +    "where concept_id !=0 and concept_id in (select distinct condition_concept_id from {})".format(tnCondition)
         concept_cond_df = pd.read_sql(sql=sql_query, con=conn)
-        log.debug(len(concept_meas_df), len(concept_drug_df), len(concept_proc_df), len(concept_cond_df))
+        log.debug('success : {}, {}, {}, {}'.format(len(concept_meas_df), len(concept_drug_df), len(concept_proc_df), len(concept_cond_df)))
         concept_df = pd.concat([concept_meas_df, concept_drug_df, concept_proc_df, concept_cond_df], axis=0)
 
         # In[ ]:

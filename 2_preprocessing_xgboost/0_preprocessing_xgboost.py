@@ -77,7 +77,6 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         proc_df = proc_df[common_cols]
         cond_df = cond_df[common_cols]
 
-        log.debug(len(meas_df), len(drug_df), len(proc_df), len(cond_df), (len(meas_df) + len(drug_df) + len(proc_df) + len(cond_df)))
         log.info("[nData] m : {} d : {} p : {}  c : {} all : {}".format(len(meas_df), len(drug_df), len(proc_df), len(cond_df), (len(meas_df) + len(drug_df) + len(proc_df) + len(cond_df))))
 
         # @valid data processing for cohorts.
@@ -93,7 +92,7 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             return df['c_f'].mean().days
 
         ndays = average_duration_of_adverse_events(cond_df)
-        log.debug(ndays)
+        log.info('average_duration_of_adverse_events : {}'.format(ndays))
 
         # person_df = meas_df[["person_id", "label"]].drop_duplicates()
         # print(person_df.label.value_counts())
