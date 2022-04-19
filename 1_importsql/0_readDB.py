@@ -39,6 +39,7 @@ curr_file_name = os.path.splitext(os.path.basename(__file__))[0]
 # In[ ]:
 # **create Logger**
 log = CL("custom_logger")
+pathlib.Path.mkdir(pathlib.Path('{}/_log/'.format(parent_dir)), mode=0o777, parents=True, exist_ok=True)
 log = log.create_logger(file_name="../_log/{}.log".format(curr_file_name), mode="a", level="DEBUG")  
 log.debug('start {}'.format(curr_file_name))
 
@@ -211,10 +212,10 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             _2times = 2
             _1_5times = 1.5
 
-            concept_id_AST = cfg['meas']["AST"]
-            concept_id_ALT = cfg['meas']["ALT"]
-            concept_id_ALP = cfg['meas']["ALP"]
-            concept_id_TB = cfg['meas']["TB"]
+            concept_id_AST = cfg['meas']["AST"]['@meas_concept_id']
+            concept_id_ALT = cfg['meas']["ALT"]['@meas_concept_id']
+            concept_id_ALP = cfg['meas']["ALP"]['@meas_concept_id']
+            concept_id_TB = cfg['meas']["TB"]['@meas_concept_id']
 
             def extraction_of_past_abnormalities(domain_df, concept_id, value):
                 n_prev_data = len(domain_df)
@@ -292,7 +293,7 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             _2times = 2
             _1_5times = 1.5
 
-            concept_id_CR = cfg['meas']["CR"]
+            concept_id_CR = cfg['meas']["CR"]['@meas_concept_id']
 
             def extraction_of_past_abnormalities(domain_df, concept_id, value):
                 n_prev_data = len(domain_df)

@@ -37,6 +37,7 @@ curr_file_name = os.path.splitext(os.path.basename(__file__))[0]
 # In[ ]:
 # **create Logger**
 log = CL("custom_logger")
+pathlib.Path.mkdir(pathlib.Path('{}/_log/'.format(parent_dir)), mode=0o777, parents=True, exist_ok=True)
 log = log.create_logger(file_name="../_log/{}.log".format(curr_file_name), mode="a", level="DEBUG")  
 log.debug('start {}'.format(curr_file_name))
 
