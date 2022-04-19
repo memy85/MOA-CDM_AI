@@ -29,9 +29,9 @@ SELECT 6 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 
 ) I
 ) C UNION ALL 
-SELECT 10 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
+SELECT 11 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from @vocabulary_database_schema.CONCEPT where concept_id in (705103,705108,705160,19069199,705161,705152,19006206,19006207,19006208,19024856,42963260,42963270)
+  select concept_id from @vocabulary_database_schema.CONCEPT where concept_id in (705103,705108,705160,19069199,705161,705152,19006206,19006208,19024856,42963260,42963270,42963259,19006207,42963251,42963269)
 
 ) I
 ) C
@@ -56,7 +56,7 @@ from
 (
   select de.* 
   FROM @cdm_database_schema.DRUG_EXPOSURE de
-JOIN #Codesets cs on (de.drug_concept_id = cs.concept_id and cs.codeset_id = 10)
+JOIN #Codesets cs on (de.drug_concept_id = cs.concept_id and cs.codeset_id = 11)
 ) C
 
 

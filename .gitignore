@@ -2,6 +2,7 @@ venv_lstm/
 venv/
 data/
 result/
+_revisions/
 .idea/
 # Byte-compiled / optimized / DLL files
 __pycache__/
