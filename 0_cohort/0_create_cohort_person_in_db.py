@@ -71,8 +71,25 @@ def renderTranslateQuerySql(sql_query, dict):
 # In[ ]:
 try:
     with conn.cursor() as cursor:
-        for file_path in cfg['translatequerysql']:
-            param_dict = cfg['translatequerysql'][file_path]
+        for file_path in cfg['translatequerysql0']:
+            param_dict = cfg['translatequerysql0'][file_path]
+            print(file_path)
+            print(param_dict)
+            fd = open(file_path, 'r')
+            sql_query = fd.read()
+            sql_query = renderTranslateQuerySql(sql_query, param_dict)
+            fd.close()
+            cursor.execute(sql_query)
+        conn.commit()
+except :
+    traceback.print_exc()
+    log.error(traceback.format_exc())
+
+# In[ ]:
+try:
+    with conn.cursor() as cursor:
+        for file_path in cfg['translatequerysql1']:
+            param_dict = cfg['translatequerysql1'][file_path]
             for drug in cfg['drug'].keys():
                 sql_param_dict = param_dict.copy()
                 for param_key, param_value in sql_param_dict.items():

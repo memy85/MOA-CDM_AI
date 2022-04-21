@@ -33,17 +33,23 @@
         "valproic_acid": { "interest_abnormal": "hepatotoxicity", "drug_target_cohort_id": "99003" },
         "lamotrigine": { "interest_abnormal": "hepatotoxicity", "drug_target_cohort_id": "99004" }
     },
-    "translatequerysql":{
+    "translatequerysql0":{
+        "../_sql/atlas_cohort/create_cohort_table.sql":{
+            "@cohort_database_schema": "temp.dbo",
+            "@cohort_table": "cohort"
+        }
+    },
+    "translatequerysql1":{
         "../_sql/atlas_cohort/insert_cohort_table_{drug}_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
-            "@target_database_schema": "WEBAPI.dbo",
+            "@target_database_schema": "temp.dbo",
             "@target_cohort_table": "cohort",
             "@vocabulary_database_schema": "CDM.dbo",
             "@target_cohort_id": "{drug_target_cohort_id}"
         },
         "../_sql/person_drug/create_table_person_drug_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
-            "@cohort_database_schema": "WEBAPI.dbo",
+            "@cohort_database_schema": "temp.dbo",
             "@target_cohort_table": "cohort",
             "@target_database_schema": "temp.dbo",
             "@target_person_table":"person_{drug}",
