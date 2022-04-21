@@ -1,7 +1,7 @@
 venv_lstm/
 venv/
-data/
 result/
+_temp/
 _revisions/
 .idea/
 # Byte-compiled / optimized / DLL files
