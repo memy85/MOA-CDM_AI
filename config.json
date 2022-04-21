@@ -1,5 +1,5 @@
 {
-    "working_date": "20220418",
+    "working_date": "19000101",
     "dbms": "postgresql",
     "mssql": {
         "@server": "111.111.111.111",
