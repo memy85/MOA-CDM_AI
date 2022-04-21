@@ -423,9 +423,9 @@ def get_matching_pairs(label1_df, label0_df, scaler=True):
         label1_x = scaler.transform(label1_x)
         label0_x = scaler.transform(label0_x)
         
-    nbrs = NearestNeighbors(n_neighbors=3, algorithm="auto").fit(label0_x)
+    nbrs = NearestNeighbors(n_neighbors=5, algorithm="auto").fit(label0_x)
     distance, indices = nbrs.kneighbors(label1_x)
     # print(indices.shape)
-    indices = indices.reshape(indices.shape[0]*3)
+    indices = indices.reshape(indices.shape[0]*5)
     matched = label0_df.iloc[indices]
     return matched

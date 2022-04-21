@@ -145,15 +145,23 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         # cond_df2 = extractSelectedConceptID(cond_df2, cond_common_features.concept_id.unique())
 
         all_domain_df = pd.concat([meas_df2, drug_df2, proc_df2, cond_df2], axis=0, ignore_index=True)
+        all_domain_df.drop(all_domain_df[all_domain_df['concept_domain']=='drug'].index, inplace=True)
 
-        ### @성향점수 매칭 (Propensity Score matching)
-        # label1_df = all_domain_df.drop_duplicates(['person_id'])[all_domain_df['label']==1][['person_id', 'age']]
-        # label0_df = all_domain_df.drop_duplicates(['person_id'])[all_domain_df['label']==0][['person_id', 'age']]
+        ## @성향점수 매칭 (Propensity Score matching)
+        label1_df = all_domain_df.drop_duplicates(['person_id'])[all_domain_df['label']==1][['person_id', 'age']]
+        label0_df = all_domain_df.drop_duplicates(['person_id'])[all_domain_df['label']==0][['person_id', 'age']]
 
-        # matched_df = get_matching_pairs(label1_df['age'], label0_df['age'], scaler=False)
-        # person_id_list = set(label0_df.loc[matched_df.index].person_id) | set(label1_df.person_id)
+        matched_df = get_matching_pairs(label1_df['age'], label0_df['age'], scaler=False)
+        person_id_list = set(label0_df.loc[matched_df.index].person_id) | set(label1_df.person_id)
 
-        ###
+        def extract_selected_person_ids(domain_df, subject_id_list):
+            extract_domain_df = domain_df[domain_df['person_id'].isin(subject_id_list)]
+            print(len(subject_id_list), len(domain_df), len(extract_domain_df))
+            return extract_domain_df
+
+        all_domain_df = extract_selected_person_ids(all_domain_df, person_id_list).reset_index(drop=True)
+        ## @성향점수 매칭 end
+        
         # # @test : 
         # averageDurationOfAE = average_duration_of_adverse_events(all_domain_df)
         # print(averageDurationOfAE)
