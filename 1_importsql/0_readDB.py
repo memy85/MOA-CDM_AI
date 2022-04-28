@@ -47,7 +47,7 @@ log.debug('start {}'.format(curr_file_name))
 # ** connection DataBase **
 if (cfg["dbms"]=="postgresql"):
     db_cfg = cfg["postgresql"]
-    import psycogp2 as pg
+    import psycopg2 as pg
     conn = pg.connect(host=db_cfg['@server'], user=db_cfg['@user'], password=db_cfg['@password'], port=db_cfg['@port'], dbname=db_cfg['@database']) 
     log.debug("postgresql connect")
     

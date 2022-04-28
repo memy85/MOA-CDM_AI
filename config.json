@@ -36,21 +36,21 @@
     "translatequerysql0":{
         "../_sql/atlas_cohort/create_cohort_table.sql":{
             "@cohort_database_schema": "temp.dbo",
-            "@cohort_table": "cohort"
+            "@cohort_table": "temp_cohort"
         }
     },
     "translatequerysql1":{
         "../_sql/atlas_cohort/insert_cohort_table_{drug}_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
             "@target_database_schema": "temp.dbo",
-            "@target_cohort_table": "cohort",
+            "@target_cohort_table": "temp_cohort",
             "@vocabulary_database_schema": "CDM.dbo",
             "@target_cohort_id": "{drug_target_cohort_id}"
         },
         "../_sql/person_drug/create_table_person_drug_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
             "@cohort_database_schema": "temp.dbo",
-            "@target_cohort_table": "cohort",
+            "@target_cohort_table": "temp_cohort",
             "@target_database_schema": "temp.dbo",
             "@target_person_table":"person_{drug}",
             "@target_cohort_id": "{drug_target_cohort_id}"
