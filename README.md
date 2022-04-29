@@ -74,7 +74,7 @@ pip install psycopg2-binary
 edit config.json file
 
 * 'working_date' : Date to run the program.
-* 'dbms' : mssql or postgres
+* 'dbms' : mssql or postgresql
 * 'mssql' or 'postgresql' : server / user /password / port .. 
 * 'meas' : meas_concept_id (used by the institution)
 * 'translatequerysql' : cdm_database_schema / target_database_schema / target_database_schema

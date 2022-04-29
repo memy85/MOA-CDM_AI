@@ -34,7 +34,7 @@
         "lamotrigine": { "interest_abnormal": "hepatotoxicity", "drug_target_cohort_id": "99004" }
     },
     "translatequerysql0":{
-        "../_sql/atlas_cohort/create_cohort_table.sql":{
+        "../_sql/atlas_cohort/create_temp_cohort_table_{dbms}.sql":{
             "@cohort_database_schema": "temp.dbo",
             "@cohort_table": "temp_cohort"
         }

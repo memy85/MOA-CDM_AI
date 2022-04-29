@@ -73,9 +73,10 @@ try:
     with conn.cursor() as cursor:
         for file_path in cfg['translatequerysql0']:
             param_dict = cfg['translatequerysql0'][file_path]
-            print(file_path)
+            sql_file_path = file_path.replace("{dbms}", cfg["dbms"])
+            print(sql_file_path)
             print(param_dict)
-            fd = open(file_path, 'r')
+            fd = open(sql_file_path, 'r')
             sql_query = fd.read()
             sql_query = renderTranslateQuerySql(sql_query, param_dict)
             fd.close()
