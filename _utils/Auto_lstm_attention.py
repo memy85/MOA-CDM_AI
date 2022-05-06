@@ -90,6 +90,7 @@ class Auto_lstm_attention():
         #                          activity_regularizer=regularizers.l2(0.01))
 
         x = Attention(10)(x)
+        x = Dropout(0.2)(x)
         x = Dense(1)(x)
 
         model = Model(xInput, x)
@@ -166,16 +167,14 @@ class Auto_lstm_attention():
     def model_performance_evaluation(self, output_path, outcome_name):
         
         cf = confusion_matrix(self.y_test, self.y_pred, labels=[1,0])
-        TP = cf[0][0]
-        FP = cf[0][1]
-        FN = cf[1][0]
-        TN = cf[1][1]
+        TP, FP, FN, TN = cf[0][0], cf[1][0], cf[0][1], cf[1][1]
         
         result = {}
         result['TP'] = TP
-        result['TN'] = FP
-        result['FP'] = FN
-        result['FN'] = TN
+        result['FP'] = FP
+        result['FN'] = FN
+        result['TN'] = TN
+        
         result['precision'] = TP/(TP+FP)
         result['specificity'] = TN/(TN+FP)
         result['sensitivity'] = TP/(TP+FN) 
@@ -470,6 +469,7 @@ class Auto_lstm_attention():
                                                kernel_initializer='glorot_uniform'),
                                      activity_regularizer=regularizers.l2(0.01))
             X = Attention(10)(X)
+            X = Dropout(0.2)(X)
             X = Dense(1)(X)
             model = Model(xInput, X)
             model.compile(loss='binary_crossentropy',optimizer='adam', metrics=['accuracy']) # 1,0 binary 일 때 

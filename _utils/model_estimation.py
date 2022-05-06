@@ -26,7 +26,7 @@ def get_clf_eval(y_test, y_pred=None, pred_proba=None):
     
     cf = confusion_matrix(y_test, y_pred, labels=[1,0])
     roc_auc = roc_auc_score(y_test, pred_proba)
-    TP, FP, FN, TN = cf[0][0], cf[0][1], cf[1][0], cf[1][1]
+    TP, FP, FN, TN = cf[0][0], cf[1][0], cf[0][1], cf[1][1]
     
     result = {}
     result['TP'] = TP
@@ -105,16 +105,14 @@ def model_performance_evaluation(y_test, y_pred, pred_proba, output_path, outcom
 
     cf = confusion_matrix(y_test, y_pred, labels=[1,0])
     roc_auc = roc_auc_score(y_test, pred_proba)
-    TP = cf[0][0]
-    FP = cf[0][1]
-    FN = cf[1][0]
-    TN = cf[1][1]
+    TP, FP, FN, TN = cf[0][0], cf[1][0], cf[0][1], cf[1][1]
     
     result = {}
     result['TP'] = TP
-    result['TN'] = FP
-    result['FP'] = FN
-    result['FN'] = TN
+    result['FP'] = FP
+    result['FN'] = FN
+    result['TN'] = TN
+        
     result['precision'] = TP/(TP+FP)
     result['specificity'] = TN/(TN+FP)
     result['sensitivity'] = TP/(TP+FN) 
@@ -155,7 +153,7 @@ def model_performance_evaluation(y_test, y_pred, pred_proba, output_path, outcom
     # print(cm)
     return
         
-def confusion_matrix_figure(y_pred, y_test, output_domain_path, outcome_name):        
+def confusion_matrix_figure(y_test, y_pred, output_domain_path, outcome_name):        
     import matplotlib.pyplot as plt
     class_names=[0,1]
     # plot_confusion_matrix function
@@ -209,7 +207,7 @@ def confusion_matrix_figure(y_pred, y_test, output_domain_path, outcome_name):
                 dpi=300, facecolor='white', transparent=True,  bbox_inches='tight')
     return
 
-def confusion_matrix_figure2(y_pred, y_test, output_domain_path, outcome_name):        
+def confusion_matrix_figure2(y_test, y_pred, output_domain_path, outcome_name):        
     import seaborn as sns
     import matplotlib.pyplot as plt
     plt.figure()
