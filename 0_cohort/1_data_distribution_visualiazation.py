@@ -79,7 +79,34 @@ for drug in cfg['drug'].keys():
     print(drug)
 
 # In[ ]:
+for atccode in cfg['atccode'].keys():
+    
+    try :
+        output_dir = pathlib.Path('{}/result/{}/data_distribution/{}'.format(parent_dir, current_date, atccode))
+        pathlib.Path.mkdir(output_dir, mode=0o777, parents=True, exist_ok=True)
+        print(atccode)
+        drug_set = cfg['atccode'][atccode]['drugset']
+        drug_df_list = []
+        for drug in drug_set:
+            print(drug)
+            # sql_query = "select * from {}.person_{}".format(db_cfg['@person_database_schema'], drug)
+            sql_query = "select * from {}.person_{}".format('temp_suncheol.dbo', drug)
+            print(sql_query)
+            person_df = pd.read_sql(sql=sql_query, con=conn)
+            drug_df_list.append(person_df)
+            print(len(person_df))
+        concat_df = pd.concat(drug_df_list, axis=0)
+        print(len(concat_df))
+        concat_df.drop_duplicates(subset=['person_id'], keep='first', inplace=True)
 
+        saveGenderPiePlot(concat_df, output_dir, drug+"_gender1")
+        saveGenderbarPlot(concat_df, output_dir, drug+"_gender2")
+        saveAgebarPlot(concat_df, output_dir, drug+"_age")
+            
+    except :
+        traceback.print_exc()
+        log.error(traceback.format_exc())
+                
 
 # In[ ]:
 from matplotlib import pyplot as plt
@@ -89,7 +116,7 @@ import seaborn as sns
 with conn.cursor() as cursor:
     for drug in cfg['drug'].keys():
         try :
-            output_dir = pathlib.Path('{}/data/{}/create_cohort/{}'.format(parent_dir, current_date, drug))
+            output_dir = pathlib.Path('{}/result/{}/create_cohort/{}'.format(parent_dir, current_date, drug))
             pathlib.Path.mkdir(output_dir, mode=0o777, parents=True, exist_ok=True)
             
             sql_query = "select * from {}.person_{}".format(db_cfg['@person_database_schema'], drug)

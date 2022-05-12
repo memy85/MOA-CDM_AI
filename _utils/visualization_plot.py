@@ -174,3 +174,75 @@ def save_percentile_plot(df, filedir, filename):
 
     plt.savefig('{}/{}_plot3.png'.format(filedir, filename), dpi=300, facecolor='white', edgecolor='none')
     plt.show()
+    
+    
+def saveGenderPiePlot(df, output_dir, output_name):
+    sns.set_palette("deep")
+    sns.set_style("whitegrid")
+
+    #define Seaborn color palette to use
+    plt.figure(dpi=200)
+    plt.pie(df['gender_source_value'].value_counts(),
+            labels=['male', 'female'],
+            explode=(0.1, 0.0),
+            autopct='%0.1f%%')
+    plt.savefig('{}/{}.png'.format(output_dir, output_name), dpi=200)
+    plt.show()
+
+def saveGenderbarPlot(df, output_dir, output_name):
+    sns.set_palette("deep")
+    sns.set_style("whitegrid")
+
+    figure, axes = plt.subplots(dpi=200)
+
+    gender_count_df = pd.DataFrame(df['gender_source_value'].value_counts()).T
+    gender_count_df.rename(columns = {'M':'Male', 'F':'Female'}, inplace=True)
+    # plt.bar(gender_count_df.index, gender_count_df['Male'])
+    ax = sns.barplot(data=gender_count_df)
+    ax.set_title('Gender Distribution')
+    ax.set(xlabel="Gender", ylabel='Count') 
+    ax.get_yaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: "{:,}".format(int(x))))
+    for bar in ax.patches:
+        bar_value = bar.get_height()
+        text = '{}'.format(int(bar_value))
+        text_x = bar.get_x() + bar.get_width() / 2
+        text_y = bar.get_y() + bar_value
+        bar_color = bar.get_facecolor()
+        ax.text(text_x, text_y, text, ha='center', va='bottom', color=bar_color)
+    
+    plt.savefig('{}/{}.png'.format(output_dir, output_name), dpi=200)
+    plt.show()
+
+def saveAgebarPlot(df, output_dir, output_name):
+    sns.set_palette("deep")
+    sns.set_style("whitegrid")
+
+    figure, axes = plt.subplots(dpi=200)
+
+    df['age_dec'] = df.age.map(lambda age: 10 * (age // 10))
+    age_count_df = df.groupby(['age_dec', 'gender_source_value'])['person_id'].count().unstack().fillna(0)
+    maleAgeCounts = age_count_df['M']
+    femaleAgeCounts = age_count_df['F']
+    ind = age_count_df.index
+    width = 3  
+
+    plt.bar(ind, maleAgeCounts, width, label='Male')
+    plt.bar(ind + width, femaleAgeCounts, width, label='Female')
+    plt.xticks(ind + width / 2, age_count_df.index)
+
+    for p in axes.patches:
+        axes.annotate(s='{:.0f}'.format(p.get_height()),
+                    xy=(p.get_x()+p.get_width()/2., p.get_height()),
+                    ha='center',
+                    va='center',
+                    xytext=(0, 5),
+                    textcoords='offset points',
+                    fontsize=8)
+        
+    plt.legend(loc='best')
+    plt.title('Age Distribution') ## 타이틀 출력
+    plt.xlabel('Age') ## x축 라벨 출력
+    plt.ylabel('Count') ## y축 라벨 출력
+
+    plt.savefig('{}/{}.png'.format(output_dir, output_name), dpi=200)
+    plt.show()
