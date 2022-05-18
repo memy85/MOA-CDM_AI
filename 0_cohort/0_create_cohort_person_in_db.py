@@ -68,23 +68,74 @@ def renderTranslateQuerySql(sql_query, dict):
         sql_query = sql_query.replace(key, value)
     return sql_query
 
+# In[]:
+def writefile(filepath, text):
+    abs_path = os.path.abspath(os.path.dirname(filepath))
+    pathlib.Path.mkdir(pathlib.Path(abs_path), mode=0o777, parents=True, exist_ok=True)
+    f = open(filepath, 'w')
+    f.write(text)
+    f.close()
+    
+def readfile(filepath):
+    f = open(filepath, 'r')
+    text = f.read()
+    f.close()
+    return text
+
+def executeQuery(conn, sql_query):
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql_query)
+        conn.commit()
+    except:
+        traceback.print_exc()
+        log.error(traceback.format_exc())
 # In[ ]:
 try:
     with conn.cursor() as cursor:
-        for file_path in cfg['translatequerysql0']:
-            param_dict = cfg['translatequerysql0'][file_path]
-            sql_file_path = file_path.replace("{dbms}", cfg["dbms"])
-            print(sql_file_path)
-            print(param_dict)
-            fd = open(sql_file_path, 'r')
-            sql_query = fd.read()
+        sql_file_path = '../_sql/search_concept_ids/search_concept_ids_{dbms}.sql'
+        sql_file_path = sql_file_path.replace("{dbms}", cfg["dbms"])
+
+        for drug in cfg['drug'].keys():
+            param_dict={}
+            param_dict['@cohort_database_schema'] = db_cfg['@cdm_database_schema']
+            param_dict['@drugname'] = drug
+            sql_query = readfile(sql_file_path)
             sql_query = renderTranslateQuerySql(sql_query, param_dict)
-            fd.close()
+            # print(sql_query)
+            writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
             cursor.execute(sql_query)
+            result = cursor.fetchall()
         conn.commit()
 except :
     traceback.print_exc()
     log.error(traceback.format_exc())
+
+# In[]:
+try:
+    with conn.cursor() as cursor:
+        for file_path in cfg['translatequerysql1']:
+            param_dict = cfg['translatequerysql1'][file_path]
+            for drug in cfg['drug'].keys():
+                sql_param_dict = param_dict.copy()
+                for param_key, param_value in sql_param_dict.items():
+                    temp_param_value = param_value
+                    temp_param_value = temp_param_value.replace("{drug}", drug)
+                    temp_param_value = temp_param_value.replace("{drug_target_cohort_id}", cfg['drug'][drug]["drug_target_cohort_id"])
+                    sql_param_dict[param_key] = temp_param_value
+                sql_file_path = file_path.replace("{dbms}", cfg["dbms"]).replace("{drug}", drug)
+                print(sql_file_path)
+                print(sql_param_dict)
+                sql_query = readfile(sql_file_path)
+                sql_query = renderTranslateQuerySql(sql_query, sql_param_dict)
+                cursor.execute(sql_query)
+                writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
+        conn.commit()
+except :
+    traceback.print_exc()
+    log.error(traceback.format_exc())
+
+
 
 # In[ ]:
 try:
@@ -101,16 +152,15 @@ try:
                 sql_file_path = file_path.replace("{dbms}", cfg["dbms"]).replace("{drug}", drug)
                 print(sql_file_path)
                 print(sql_param_dict)
-                fd = open(sql_file_path, 'r')
-                sql_query = fd.read()
+                sql_query = readfile(sql_file_path)
                 sql_query = renderTranslateQuerySql(sql_query, sql_param_dict)
-                fd.close()
                 cursor.execute(sql_query)
+                writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
         conn.commit()
 except :
     traceback.print_exc()
     log.error(traceback.format_exc())
-
+    
 # In[ ]:
 try:
     with conn.cursor() as cursor:
@@ -126,11 +176,10 @@ try:
                 sql_file_path = file_path.replace("{dbms}", cfg["dbms"])
                 print(sql_file_path)
                 print(sql_param_dict)
-                fd = open(sql_file_path, 'r')
-                sql_query = fd.read()
+                sql_query = readfile(sql_file_path)
                 sql_query = renderTranslateQuerySql(sql_query, sql_param_dict)
-                fd.close()
                 cursor.execute(sql_query)
+                writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
         conn.commit()
 except :
     traceback.print_exc()

@@ -22,10 +22,11 @@ import pandas as pd
 #data_dir = '/home/taehyun/Project/cardio/data/'
 
 def get_clf_eval(y_test, y_pred=None, pred_proba=None):
-    from sklearn.metrics import confusion_matrix, roc_auc_score
-    
+    from sklearn.metrics import confusion_matrix, roc_auc_score, matthews_corrcoef
+        
     cf = confusion_matrix(y_test, y_pred, labels=[1,0])
     roc_auc = roc_auc_score(y_test, pred_proba)
+    mcc = matthews_corrcoef(y_test, y_pred)
     TP, FP, FN, TN = cf[0][0], cf[1][0], cf[0][1], cf[1][1]
     
     result = {}
@@ -40,6 +41,7 @@ def get_clf_eval(y_test, y_pred=None, pred_proba=None):
     result['accuracy'] = (TP+TN) / (FP+FN+TP+TN)
     result['f1score'] = 2*result['precision']*result['recall']/(result['precision']+result['recall'])
     result['roc_auc'] = roc_auc
+    result['mcc'] = mcc
     
     print("TP", result['TP'])
     print("FP", result['FP'])
@@ -52,6 +54,7 @@ def get_clf_eval(y_test, y_pred=None, pred_proba=None):
     print("accuracy", '{:.3%}'.format(result['accuracy']))
     print("f1score", '{:.3%}'.format(result['f1score']))
     print("roc_auc", '{:.3%}'.format(result['roc_auc']))
+    print("mcc", '{:.3%}'.format(result['mcc']))
 
 def class_balance_weight(output_domain_path, outcome_name, y_train):
     #클래스 불균형 하에서 모델은 1보다 0이 훨씬 더 많습니다. 또한 그렇게함으로써 훈련 손실을 최소화 할 수 있기 때문에 1보다 더 많은 0을 예측하는 방법을 배웁니다.
@@ -105,6 +108,7 @@ def model_performance_evaluation(y_test, y_pred, pred_proba, output_path, outcom
 
     cf = confusion_matrix(y_test, y_pred, labels=[1,0])
     roc_auc = roc_auc_score(y_test, pred_proba)
+    mcc = matthews_corrcoef(y_test, y_pred)
     TP, FP, FN, TN = cf[0][0], cf[1][0], cf[0][1], cf[1][1]
     
     result = {}
@@ -120,6 +124,7 @@ def model_performance_evaluation(y_test, y_pred, pred_proba, output_path, outcom
     result['accuracy'] = (TP+TN) / (FP+FN+TP+TN)
     result['f1score'] = 2*result['precision']*result['recall']/(result['precision']+result['recall'])
     result['roc_auc'] = roc_auc
+    result['mcc'] = mcc
     
     out = open('{}/model_performance_evaluation.txt'.format(output_path),'a')
     out.write(str(outcome_name) + '///')
@@ -132,7 +137,8 @@ def model_performance_evaluation(y_test, y_pred, pred_proba, output_path, outcom
     out.write('{:.3}'.format(result['accuracy']) + '///')
     out.write('{:.3}'.format(result['recall'])+ '///')
     out.write('{:.3}'.format(result['f1score'])+ '///')
-    out.write('{:.3}'.format(result['roc_auc']))
+    out.write('{:.3}'.format(result['roc_auc'])+ '///')
+    out.write('{:.3}'.format(result['mcc']))
     out.write('\n')        
     out.close()
     
@@ -146,6 +152,7 @@ def model_performance_evaluation(y_test, y_pred, pred_proba, output_path, outcom
     print("recall", '{:.3%}'.format(result['recall']))
     print("f1_score", '{:.3%}'.format(result['f1score']))    
     print("roc_auc", '{:.3%}'.format(result['roc_auc']))    
+    print("mcc", '{:.3%}'.format(result['mcc']))    
     # from pycm import *
     # cm = ConfusionMatrix(actual_vector=np.array(c.y_test.ravel()), predict_vector=np.array(c.y_pred.ravel()))
     # cm.classes
