@@ -41,7 +41,7 @@
         "Ketoprofen":     {"task":"1", "ade":"nephrotoxicity", "drug_target_cohort_id":"99011", "@drug_concept_set":"42917410,42922177,42971822"},
         "Piroxicam":      {"task":"1", "ade":"nephrotoxicity", "drug_target_cohort_id":"99012", "@drug_concept_set":"42922576,42973718,42973730"},
         "Meloxicam":      {"task":"2", "ade":"nephrotoxicity", "drug_target_cohort_id":"99013", "@drug_concept_set":"19103398,1150345,19103397,42374544,42374456,42952570,42952694,42952697,43256386,42952583,43288947"},
-        "Celecoxib":      {"task":"2", "ade":"nephrotoxicity", "drug_target_cohort_id":"99014", "@drug_concept_set":"1118084,42379539,19029024,19029025,19107261,1118113,42927269,42927347,42927353,1118087,1118088},
+        "Celecoxib":      {"task":"2", "ade":"nephrotoxicity", "drug_target_cohort_id":"99014", "@drug_concept_set":"1118084,42379539,19029024,19029025,19107261,1118113,42927269,42927347,42927353,1118087,1118088"},
         "Valproic_acid":  {"task":"2", "ade":"hepatotoxicity", "drug_target_cohort_id":"99015", "@drug_concept_set":"42377469,40989613,42921639,42919003,42658275,40237993,40238249,40238257,745466,42931710,42931715,42931727,42931726,42931742,42931743,42931750"},
         "Lamotrigine":    {"task":"2", "ade":"hepatotoxicity", "drug_target_cohort_id":"99016", "@drug_concept_set":"705103,705108,705160,19069199,705161,705152,19006206,19006208,19024856,42963260,42963270,42963259,19006207,42963251,42963269"},
         "Meloxicam_2":    {"task":"2", "ade":"hepatotoxicity", "drug_target_cohort_id":"99017", "@drug_concept_set":"19103398,1150345,19103397,42374544,42374456,42952570,42952694,42952697,43256386,42952583,43288947"},
