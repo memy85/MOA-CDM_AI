@@ -115,12 +115,12 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         # In[ ]:
         # ** Save dataset **
 
-        # population_df.to_csv('{}/population.txt'.format(output_dir),index=False)
-        # meas_df.to_csv('{}/measurement.txt'.format(output_dir),index=False)
-        # drug_df.to_csv('{}/drug.txt'.format(output_dir),index=False)
-        # proc_df.to_csv('{}/procedure.txt'.format(output_dir),index=False)
-        # cond_df.to_csv('{}/condition.txt'.format(output_dir),index=False)
-        # concept_df.to_csv('{}/concept.txt'.format(output_dir),index=False)
+        population_df.to_csv('{}/population.txt'.format(output_dir),index=False)
+        meas_df.to_csv('{}/measurement.txt'.format(output_dir),index=False)
+        drug_df.to_csv('{}/drug.txt'.format(output_dir),index=False)
+        proc_df.to_csv('{}/procedure.txt'.format(output_dir),index=False)
+        cond_df.to_csv('{}/condition.txt'.format(output_dir),index=False)
+        concept_df.to_csv('{}/concept.txt'.format(output_dir),index=False)
 
         # ### Load dataset
 
@@ -220,8 +220,8 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             def extraction_of_past_abnormalities(domain_df, concept_id, value):
                 n_prev_data = len(domain_df)
                 n_prev_person = len(domain_df.person_id.unique())
-                history_query = """(sex==1 and cohort_start_date>=concept_date and concept_id=={} and concept_value>{}) or \
-                    (sex==0 and cohort_start_date>=concept_date and concept_id=={} and concept_value>{})""" \
+                history_query = """(sex==1 and cohort_start_date>=concept_date and concept_id=={} and concept_value>{} and range_high > 0) or \
+                    (sex==0 and cohort_start_date>=concept_date and concept_id=={} and concept_value>{} and range_high > 0)""" \
                     .format(concept_id, value, concept_id, value)
                 historynormal_person = domain_df.query(history_query)
                 print(history_query)
@@ -247,8 +247,8 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             def extraction_of_abnormalities(domain_df, concept_id, value):
                 n_prev_data = len(domain_df)
                 n_prev_person = len(domain_df.person_id.unique())
-                history_query = """(sex==1 and cohort_start_date<concept_date and concept_id=={} and concept_value>=({})) or \
-                    (sex==0 and cohort_start_date<concept_date and concept_id=={} and concept_value>=({}))""" \
+                history_query = """(sex==1 and cohort_start_date<concept_date and concept_id=={} and concept_value>=({}) and range_high != 0) or \
+                    (sex==0 and cohort_start_date<concept_date and concept_id=={} and concept_value>=({}) and range_high != 0)""" \
                     .format(concept_id, value, concept_id, value)
                 historynormal_person = domain_df.query(history_query)
                 print(history_query)
@@ -259,25 +259,29 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
                 print('{} > {}'.format(n_prev_person, n_prev_person))
                 return historynormal_person
 
-            abnormalities_AST_range = extraction_of_abnormalities(meas_df, concept_id_AST, value="range_high*3")
-            abnormalities_ALT_range = extraction_of_abnormalities(meas_df, concept_id_ALT, value="range_high*3")
-            abnormalities_ALP_range = extraction_of_abnormalities(meas_df, concept_id_ALP, value="range_high*2")
-            abnormalities_TB_range = extraction_of_abnormalities(meas_df, concept_id_TB, value="range_high*2")
-            abnormalities_AST_value = extraction_of_abnormalities(meas_df, concept_id_AST, value="200")
-            abnormalities_ALT_value = extraction_of_abnormalities(meas_df, concept_id_ALT, value="200")
+            sql_query_ALT = """(cohort_start_date<concept_date and concept_id=={} and concept_value>={} and range_high > 0)""" \
+                    .format(concept_id_ALT, "range_high*5")
+            sql_query_ALP = """(cohort_start_date<concept_date and concept_id=={} and concept_value>={} and range_high > 0)""" \
+                    .format(sql_query_ALP, "range_high*2")
+            sql_query_ALT_TB_1 = """(cohort_start_date<concept_date and concept_id=={} and concept_value>={} and range_high > 0)""" \
+                    .format(concept_id_ALP, "range_high*3")
+            sql_query_ALT_TB_2 = """(cohort_start_date<concept_date and concept_id=={} and concept_value>{} and range_high > 0)""" \
+                    .format(concept_id_TB, "range_high*2")
 
-            abnormalities_df = pd.concat([abnormalities_AST_range, \
-                    abnormalities_ALT_range, \
-                    abnormalities_ALP_range, \
-                    abnormalities_TB_range, \
-                    abnormalities_AST_value, \
-                    abnormalities_ALT_value], axis=0, ignore_index=True)
+            abnormalities_ALT_range = meas_df.query(sql_query_ALT)
+            abnormalities_ALP_range = meas_df.query(sql_query_ALP)
+            abnormalities_ALT_TB_1_range = meas_df.query(sql_query_ALT_TB_1)
+            abnormalities_ALT_TB_2_range = meas_df.query(sql_query_ALT_TB_2)
+
+            abnormalities = set(abnormalities_ALT_range.person_id.unique()) \
+                | set(abnormalities_ALP_range.person_id.unique()) \
+                | (set(abnormalities_ALT_TB_1_range.person_id.unique()) & set(abnormalities_ALT_TB_2_range.person_id.unique()))
             
-            abnormalities = set(abnormalities_df.person_id.unique())
+            # In[]:
             print("abnormal : n = ", len(abnormalities))
 
-            # abnormalities_df = meas_df.query("cohort_start_date<concept_date")
-            # abnormalities_df = abnormalities_df[abnormalities_df["person_id"].isin(abnormalities)]
+            abnormalities_df = meas_df.query("cohort_start_date<concept_date")
+            abnormalities_df = abnormalities_df[abnormalities_df["person_id"].isin(abnormalities)]
             abnormalities_df = abnormalities_df[["person_id", "concept_date"]]
             abnormalities_df = abnormalities_df.sort_values(by=["person_id", "concept_date"], axis=0, ascending=[True, True]).reset_index(drop=True)
             abnormalities_df = abnormalities_df.rename({"concept_date":"first_abnormal_date"}, axis=1)
@@ -355,6 +359,12 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         drug_df = pd.merge(drug_df, abnormalities_df, left_on=["person_id"], right_on=["person_id"], how="left").reset_index(drop=True)
         proc_df = pd.merge(proc_df, abnormalities_df, left_on=["person_id"], right_on=["person_id"], how="left").reset_index(drop=True)
         cond_df = pd.merge(cond_df, abnormalities_df, left_on=["person_id"], right_on=["person_id"], how="left").reset_index(drop=True)
+
+        # In[]:
+        meas_df = meas_df.rename({"first_abnormal_date_y":"first_abnormal_date"}, axis=1)
+        drug_df = drug_df.rename({"first_abnormal_date_y":"first_abnormal_date"}, axis=1)
+        proc_df = proc_df.rename({"first_abnormal_date_y":"first_abnormal_date"}, axis=1)
+        cond_df = cond_df.rename({"first_abnormal_date_y":"first_abnormal_date"}, axis=1)
 
         meas_df['label'] = (~meas_df['first_abnormal_date'].isnull()).astype(int)
         drug_df['label'] = (~drug_df['first_abnormal_date'].isnull()).astype(int)
