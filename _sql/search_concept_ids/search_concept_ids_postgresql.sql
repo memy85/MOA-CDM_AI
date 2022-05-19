@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS temp_drug_concept;
 
 SELECT DISTINCT concept_id, concept_name, standard_concept, vocabulary_id
 INTO temp temp_drug_concept
-FROM cdm.dbo.drug_exposure d
-LEFT JOIN cdm.dbo.concept c
+FROM @cohort_database_schema.drug_exposure d
+LEFT JOIN @cohort_database_schema.concept c
 ON d.drug_concept_id = c.concept_id
 
 -- 2, search string
