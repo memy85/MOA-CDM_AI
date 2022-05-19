@@ -207,7 +207,7 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         # ***** setting first abnormal date *****
         # # ** hepatotoxicity (간독성) **
 
-        if 'hepatotoxicity' == cfg['drug'][outcome_name]['interest_abnormal'] :
+        if 'hepatotoxicity' == cfg['drug'][outcome_name]['ade'] :
             _3times = 3
             _2times = 2
             _1_5times = 1.5
@@ -292,7 +292,7 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         # In[ ]:
         # **nephrotoxicity(신독성)**
 
-        if 'nephrotoxicity' == cfg['drug'][outcome_name]['interest_abnormal'] :
+        if 'nephrotoxicity' == cfg['drug'][outcome_name]['ade'] :
             _3times = 3
             _2times = 2
             _1_5times = 1.5
