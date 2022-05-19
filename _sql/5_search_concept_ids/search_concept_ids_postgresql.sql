@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS temp_concepts;
 SELECT *
 INTO temp temp_concepts
 FROM temp_drug_concept
-WHERE concept_name LIKE '%@drugname%' and vocabulary_id LIKE '%Rxnorm%' and standard_concept='S'
+WHERE lower(concept_name) LIKE lower('%@drugname%') and lower(vocabulary_id) LIKE lower('%RxNorm%') and standard_concept='S'
 
 -- 3, results 
 -- SELECT * FROM temp_concepts
