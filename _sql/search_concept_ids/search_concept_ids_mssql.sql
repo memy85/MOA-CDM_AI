@@ -2,7 +2,7 @@
 IF OBJECT_ID('tempdb..#temp_drug_concept') IS NOT NULL
 	DROP TABLE #temp_drug_concept
 
-SELECT DISTINCT concept_id, concept_name
+SELECT DISTINCT concept_id, concept_name, standard_concept, vocabulary_id
 INTO #temp_drug_concept
 FROM @cohort_database_schema.drug_exposure d
 LEFT JOIN @cohort_database_schema.concept c
@@ -15,7 +15,7 @@ IF OBJECT_ID('tempdb..#temp_concepts') IS NOT NULL
 SELECT *
 INTO #temp_concepts
 FROM #temp_drug_concept
-WHERE concept_name LIKE '%@drugname%'
+WHERE concept_name LIKE '%@drugname%' and vocabulary_id LIKE '%Rxnorm%' and standard_concept='S'
 
 -- 3, results 
 -- SELECT * FROM #temp_concepts
