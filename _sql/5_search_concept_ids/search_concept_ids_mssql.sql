@@ -15,7 +15,7 @@ IF OBJECT_ID('tempdb..#temp_concepts') IS NOT NULL
 SELECT *
 INTO #temp_concepts
 FROM #temp_drug_concept
-WHERE concept_name LIKE '%@drugname%' and vocabulary_id LIKE '%Rxnorm%' and standard_concept='S'
+WHERE lower(concept_name) LIKE lower('%@drugname%') and lower(vocabulary_id) LIKE lower('%RxNorm%') and standard_concept='S'
 
 -- 3, results 
 -- SELECT * FROM #temp_concepts

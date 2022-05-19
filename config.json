@@ -127,7 +127,6 @@
     "translatequerysql3":{
         "../_sql/3_make_table_from_2cohort/make_person_from_2cohort_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
-            "@target_measurement_concept_id": "{@meas_concept_id}",
             "@target_database_schema": "temp.dbo",
             "@target_person_table_total": "person_{drug}_total",
             "@target_person_table_case": "person_{drug}_case",
