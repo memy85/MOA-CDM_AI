@@ -45,7 +45,7 @@ INTO #temp_cohort_sampling
 FROM #temp_cohort
 ORDER BY cohort_start_date2 DESC
 
-select * from #temp_cohort_sampling
+--select * from #temp_cohort_sampling
 
 ---- 5) join table (cohort & person) ----
 
