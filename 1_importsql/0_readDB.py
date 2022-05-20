@@ -262,9 +262,9 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             sql_query_ALT = """(cohort_start_date<concept_date and concept_id=={} and concept_value>={} and range_high > 0)""" \
                     .format(concept_id_ALT, "range_high*5")
             sql_query_ALP = """(cohort_start_date<concept_date and concept_id=={} and concept_value>={} and range_high > 0)""" \
-                    .format(sql_query_ALP, "range_high*2")
+                    .format(concept_id_ALP, "range_high*2")
             sql_query_ALT_TB_1 = """(cohort_start_date<concept_date and concept_id=={} and concept_value>={} and range_high > 0)""" \
-                    .format(concept_id_ALP, "range_high*3")
+                    .format(concept_id_ALT, "range_high*3")
             sql_query_ALT_TB_2 = """(cohort_start_date<concept_date and concept_id=={} and concept_value>{} and range_high > 0)""" \
                     .format(concept_id_TB, "range_high*2")
 
