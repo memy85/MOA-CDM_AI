@@ -44,6 +44,7 @@ if (cfg["dbms"]=="postgresql"):
     db_cfg = cfg["postgresql"]
     import psycopg2 as pg
     conn = pg.connect(host=db_cfg['@server'], user=db_cfg['@user'], password=db_cfg['@password'], port=db_cfg['@port'], dbname=db_cfg['@database']) 
+    conn.autocommit = True
     log.debug("postgresql connect")
     
 elif (cfg["dbms"]=="mssql"):
@@ -64,7 +65,7 @@ def writefile(filepath, text):
     f.close()
     
 def readfile(filepath):
-    f = open(filepath, 'r')
+    f = open(filepath, 'r', encoding='utf-8')
     text = f.read()
     f.close()
     return text
@@ -180,12 +181,12 @@ try:
     with conn.cursor() as cursor:
         f = open("{}/output.txt".format(output_dir), 'w')
         for drug in cfg['drug'].keys():
-            sql_query = "select count(distinct person_id) from {}.person_{}".format(db_cfg['@person_database_schema'], drug)
+            sql_query = "select count(distinct person_id) from {}.person_{}_total".format(db_cfg['@person_database_schema'], drug)
             # print("select * from person_{}".format(drug))
             cursor.execute(sql_query)
             n_total_population = cursor.fetchone()[0]
             
-            sql_query = "select count(distinct person_id) from {}.person_{}_case".format(drug)
+            sql_query = "select count(distinct person_id) from {}.person_{}_case".format(db_cfg['@person_database_schema'], drug)
             # print("select * from person_{}".format(drug))
             cursor.execute(sql_query)
             n_case_population = cursor.fetchone()[0]

@@ -5,7 +5,6 @@ import re
 import os
 import pandas as pd
 import numpy as np
-import pymssql
 from statsmodels.stats.contingency_tables import mcnemar
 from datetime import timedelta
 from sklearn import preprocessing
