@@ -1,6 +1,7 @@
 venv_lstm/
 venv/
 result/
+_result/
 _temp/
 _revisions/
 .idea/
