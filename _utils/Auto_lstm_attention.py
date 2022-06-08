@@ -143,7 +143,7 @@ class Auto_lstm_attention():
         # Early stopping 객체에 의해 training 이 중지되었을 때, 그 상태가 이전 모델에 비해 validation error 가 높은 상태 일 수 있음.
         # 따라서 가장 validation performance 가 좋은 모델을 저장하는 것이 필요한데, 이를 위해 ModelCheckPoint 사용
         mc = ModelCheckpoint('best_model.h5', monitor='val_loss', mode='min', save_best_only=True)
-        h=model.fit(x_train, y_train, epochs=300,  #############################################################################
+        h=model.fit(x_train, y_train, epochs=50,  #############################################################################
                          batch_size=28, verbose=1, validation_split=0.1,
                          class_weight=class_weight,
                          callbacks=[es,mc])  # callbacks=[es,mc,visualize]
@@ -496,4 +496,46 @@ class Auto_lstm_attention():
         
         return accuracy
     
+    def plotRiskChangeOverTime(output_dir, outcome_name, nSamples=15):
+        
+        model = self.model
+        X_test = self.x_test
+        y_test = self.y_test
+        
+        for label in set(y_test.flatten()):
+            
+            y_indices = np.where(y_test.flatten() == label)[0]
+            y_label_max_count = len(y_indices)
+            nSamples = nSamples if y_label_max_count > nSamples else y_label_max_count
+            y_indices = y_indices[:nSamples]
+            X_test_indices = X_test[y_indices]
 
+            names = [layer.name for layer in model.layers]
+            activations = get_activations(model, X_test_indices, layer_names='attention_weight')
+            activations = [i for i in activations.values()]
+            activations = np.array(activations)
+            attention_matrix = np.nanmean(activations, axis=0).squeeze()
+            a=np.swapaxes(attention_matrix, 0, 1)
+
+            arranged_indices = [i for i in range((nSamples))]
+            A = a.T[arranged_indices] 
+            plt.figure(figsize = (8, 12))
+            plt.imshow(A, cmap = 'coolwarm')
+            plt.xticks(range(A.shape[1]))
+            plt.yticks(range(A.shape[0]),["patient {}".format(i+1) for i in range(nSamples)])
+            # y_scores = model.predict(X_test_indices)
+            # y_scores = (y_scores>=0.5).astype(int) 
+            # plt.yticks(range(A.shape[0]),["patient {} {}".format(i+1, y_scores[i]) for i in range(nSamples)])
+
+            # Loop over data dimensions and create text annotations.
+            for y in range(A.shape[0]):
+                for x in range(A.shape[1]):
+                    text = plt.text(x, y + 0.1, '%.4f' % A[y, x], horizontalalignment='center', verticalalignment='center',)
+
+            status = "abnormal" if label == 1 else "normal"
+            plt.colorbar()
+            plt.title('Risk change over time ({})'.format(status), fontsize=20)
+            plt.xlabel('Day', fontsize=15)
+            plt.ylabel('Patients', fontsize=15)
+            plt.savefig('{}/{}_heatmap_{}.png'.format(output_dir, outcome_name, status), format='png',
+                dpi=300, facecolor='white', transparent=True,  bbox_inches='tight')
