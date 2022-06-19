@@ -26,6 +26,8 @@ from _utils.customlogger import customlogger as CL
 # ** loading config **
 with open('./../{}'.format("config.json")) as file:
     cfg = json.load(file)
+with open('./../{}'.format("imv_lstm_params.json")) as file:
+    params = json.load(file)
 
 # In[ ]:
 # ** loading info **
@@ -104,6 +106,29 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         # print(person_df.label.value_counts())
         # person_df = cond_df[["person_id", "label"]].drop_duplicates()
         # print(person_df.label.value_counts())
+        
+        def extract_past_data_based_on_index_date(x):
+            return x.query('cohort_start_date >= concept_date')
+            
+        def filter_with_missing_rate(x, nCaseInTotal, nControlInTotal, threshold):
+            past_data = extract_past_data_based_on_index_date(x)
+            nCaseInConceptId = len(past_data.loc[past_data['label']==1,'person_id'].unique())
+            nControlInConceptId =len(past_data.loc[past_data['label']==0,'person_id'].unique())
+            fEpsilon = 1.0e-08 # devide by zero
+            fMissingRateForCase = nCaseInConceptId / (nCaseInTotal + fEpsilon)
+            fMissingRateForControl = nControlInConceptId / (nControlInTotal + fEpsilon)
+            if (fMissingRateForCase < threshold) | (fMissingRateForControl < threshold) :
+                return pd.DataFrame(columns=past_data.columns)
+            #print("{}, {}, {}, {}, {:.2}, {}, {}, {:.2}".format(set(past_data.concept_id), set(past_data.concept_name), nCaseInConceptId, nCaseInTotal, fMissingRateForCase, nControlInConceptId, nControlInTotal, fMissingRateForControl))
+            return x
+
+        nCaseInTotal = len(all_domain_vars_df.loc[all_domain_vars_df['label']==1,'person_id'].unique())
+        nControlInTotal =len(all_domain_vars_df.loc[all_domain_vars_df['label']==0,'person_id'].unique())
+
+        meas_df = meas_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
+        drug_df = drug_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
+        cond_df = cond_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
+        proc_df = proc_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
 
         # @variable selection
         meas_vars_df = variant_selection_paired_t_test(meas_df)
@@ -188,13 +213,13 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         domain_ids['cond'] = np.setdiff1d(cond_df2.concept_id.unique(), drop_cols)
 
         # -------- time series data ---------
-        interpolate_df = day_sequencing_interpolate(pivot_data, domain_ids)
+        interpolate_df = day_sequencing_interpolate(pivot_data, domain_ids, OBP=params["windowsize"])
 
         label_1 = interpolate_df[interpolate_df['label']==1]
         label_0 = interpolate_df[interpolate_df['label']==0]
 
-        rolled_label1_d = shift_rolling_window(label_1, OBP=7, nShift=7, uid_index=1)
-        rolled_label0_d = label_0_fitting(label_0, OBP=7, nShift=14, uid_index=(rolled_label1_d.unique_id.max()+1))
+        rolled_label1_d = shift_rolling_window(label_1, OBP=params["windowsize"], nShift=params["shift"], uid_index=1)
+        rolled_label0_d = label_0_fitting(label_0, OBP=params["windowsize"], nShift=params["shift"], uid_index=(rolled_label1_d.unique_id.max()+1))
 
         # label 0 + label 1
         concat_df = pd.concat([rolled_label1_d, rolled_label0_d], sort=False)

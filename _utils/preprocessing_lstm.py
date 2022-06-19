@@ -249,7 +249,7 @@ def pivotting(all_domain_df):
     pivot_data = pivot_data.rename_axis(None, axis=1)
     return pivot_data
 
-def day_sequencing_interpolate(pivot_data, domain_ids):
+def day_sequencing_interpolate(pivot_data, domain_ids, OBP):
     # 1) sorting 
     data = pivot_data.sort_values(['person_id', 'concept_date'], ascending=[True, True])
     
@@ -267,7 +267,6 @@ def day_sequencing_interpolate(pivot_data, domain_ids):
         train_max = pd.to_datetime( group_df['concept_date'].max() ) #last train date
         first_abnormal_date_max = pd.to_datetime( group_df['first_abnormal_date'].max() ) #last train date
         
-        OBP = 7
         #print(train_min, train_max, train_max - train_min) 
         if train_min == train_max :
             # 4-1) only first abnormal date
