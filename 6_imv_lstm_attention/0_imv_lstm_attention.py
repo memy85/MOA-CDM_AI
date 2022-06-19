@@ -15,7 +15,7 @@ from _utils.customlogger import customlogger as CL
 # ** loading config **
 with open('./../{}'.format("config.json")) as file:
     cfg = json.load(file)
-with open('./../{}'.format("imv_lstm_params.json")) as file:
+with open('./../{}'.format("config_params.json")) as file:
     params = json.load(file)
     
 # In[ ]:

@@ -1,20 +1,17 @@
+# In[]:
 import os
+import json
 import subprocess
 
-cdm_ai_script_list=[
-    "./0_cohort/0_create_cohort_person_in_db.py",
-    "./1_importsql/0_readDB.py",
-    "./2_preprocessing_xgboost/0_preprocessing_xgboost.py",
-    "./3_xgboost_classification/0_xgboost.py", 
-    "./4_preprocessing_lstm/0_preprocessing_lstm.py",
-    "./5_bi-lstm_attention_classification/0_lstm_attention.py"
-]
+# In[ ]:
+# ** loading config **
+with open('./{}'.format("config_scripts.json")) as file:
+    scripts = json.load(file)
 
-cdm_data_analysis_list=[
-    "./9_code_data_visualization/0_data_visualization.py"
-]
-
+# In[ ]:
 def question_yes_or_no(question):
+    if scripts["question"]:
+        return True
     while "the answer is invalid":
         reply = str(input(question+' (y/n): ')).lower().strip()
         if reply[0] == 'y':
@@ -22,30 +19,22 @@ def question_yes_or_no(question):
         if reply[0] == 'n':
             return False
         
+# In[]:
 def main():
     print('main executed')
-    for script in cdm_ai_script_list:
-        if question_yes_or_no("Execute the '{}' script".format(script)):
+    for script in scripts["scripts"]:
+        scriptpath = script["path"]
+        if script["run"] & question_yes_or_no("Execute the '{}' script".format(scriptpath)):
             cwd = os.getcwd()
-            filefullpath = os.path.abspath(script)
+            filefullpath = os.path.abspath(scriptpath)
             os.chdir(os.path.dirname(filefullpath))
             command = 'python {}'.format(filefullpath)
             print(command)
             retcode = subprocess.call(command, shell=True)
             os.chdir(cwd)
             print("retcode : {}".format(retcode))
-    
-    for script in cdm_data_analysis_list:
-        if question_yes_or_no("Execute the '{}' script".format(script)):
-            cwd = os.getcwd()
-            filefullpath = os.path.abspath(script)
-            os.chdir(os.path.dirname(filefullpath))
-            command = 'python {}'.format(os.path.abspath(script))
-            print(command)
-            subprocess.call(command, shell=True)
-            os.chdir(cwd)
-            print("retcode : {}".format(retcode))
-    
+
+# In[]:
 if __name__ == '__main__':
     # execute only if run as the entry point into the program
     main()
