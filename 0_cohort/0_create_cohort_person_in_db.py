@@ -28,7 +28,7 @@ current_dir = pathlib.Path.cwd()
 parent_dir = current_dir.parent
 current_date = cfg["working_date"]
 curr_file_name = os.path.splitext(os.path.basename(__file__))[0]
-output_dir = pathlib.Path('{}/data/{}/create_cohort/'.format(parent_dir, current_date))
+output_dir = pathlib.Path('{}/result/{}/create_cohort/'.format(parent_dir, current_date))
 pathlib.Path.mkdir(output_dir, mode=0o777, parents=True, exist_ok=True)
 
 # In[ ]:
@@ -65,7 +65,7 @@ def writefile(filepath, text):
     f.close()
     
 def readfile(filepath):
-    f = open(filepath, 'r', encoding='utf-8')
+    f = open(filepath, 'r')
     text = f.read()
     f.close()
     return text
@@ -78,6 +78,19 @@ def executeQuery(conn, sql_query):
     except:
         traceback.print_exc()
         log.error(traceback.format_exc())
+
+def executeQuerynfetchone(conn, sql_query):
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchone()
+            if result != None:
+                result = result[0]
+        conn.commit()
+    except:
+        traceback.print_exc()
+        log.error(traceback.format_exc())
+    return result
 
 def renderTranslateQuerySql(sql_query, dict):
     '''
@@ -100,10 +113,12 @@ def checkemptyvalueindict(dict):
     return False
 
 # In[ ]:
-# print drug concepts id 
+# check drug concepts id 
 sql_file_path = '../_sql/5_search_concept_ids/search_concept_ids_{dbms}.sql'
 sql_file_path = sql_file_path.replace("{dbms}", cfg["dbms"])
 
+dict_list = []
+output = pd.DataFrame()
 for drug in cfg['drug'].keys():
     param_dict={}
     param_dict['@cohort_database_schema'] = db_cfg['@cdm_database_schema']
@@ -112,11 +127,15 @@ for drug in cfg['drug'].keys():
     sql_query = renderTranslateQuerySql(sql_query, param_dict)
     # print(sql_query)
     print(param_dict)
-    writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
-    result = executeQuery(conn, sql_query)
+    writefile(filepath=sql_file_path.replace('../_sql/','../query/{}/'.format(drug)), text=sql_query)
+    result = executeQuerynfetchone(conn, sql_query)
+    dict_list.append({'drug': drug, 'concept_id': result})
     print(result)
 
+pd.DataFrame(dict_list).to_csv("{}/check_concept_id.txt".format(output_dir), index=False)
+
 # In[ ]:
+# create temp_cohort table 
 for file_path in cfg['translatequerysql0']:
     param_dict = cfg['translatequerysql0'][file_path]
     sql_file_path = file_path.replace("{dbms}", cfg["dbms"])
@@ -125,9 +144,10 @@ for file_path in cfg['translatequerysql0']:
     sql_query = readfile(sql_file_path)
     sql_query = renderTranslateQuerySql(sql_query, param_dict)
     result = executeQuery(conn, sql_query)
-    writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
-
+    writefile(filepath=sql_file_path.replace('../_sql/','../query/{}/'.format(drug)), text=sql_query)
+    
 # In[]:
+# create total(case + control) person table
 for file_path in cfg['translatequerysql1']:
     param_dict = cfg['translatequerysql1'][file_path]
     for drug in cfg['drug'].keys():
@@ -150,8 +170,9 @@ for file_path in cfg['translatequerysql1']:
         sql_query = readfile(sql_file_path)
         sql_query = renderTranslateQuerySql(sql_query, sql_param_dict)
         result = executeQuery(conn, sql_query)
-        writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
-
+        writefile(filepath=sql_file_path.replace('../_sql/','../query/{}/'.format(drug)), text=sql_query)
+# In[]:
+# create case person table
 for file_path in cfg['translatequerysql2']:
     param_dict = cfg['translatequerysql2'][file_path]
     for drug in cfg['drug'].keys():
@@ -174,33 +195,26 @@ for file_path in cfg['translatequerysql2']:
         sql_query = readfile(sql_file_path)
         sql_query = renderTranslateQuerySql(sql_query, sql_param_dict)
         result = executeQuery(conn, sql_query)
-        writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
+        writefile(filepath=sql_file_path.replace('../_sql/','../query/{}/'.format(drug)), text=sql_query)
         
 # In[ ]:
-try:
-    with conn.cursor() as cursor:
-        f = open("{}/output.txt".format(output_dir), 'w')
-        for drug in cfg['drug'].keys():
-            sql_query = "select count(distinct person_id) from {}.person_{}_total".format(db_cfg['@person_database_schema'], drug)
-            # print("select * from person_{}".format(drug))
-            cursor.execute(sql_query)
-            n_total_population = cursor.fetchone()[0]
-            
-            sql_query = "select count(distinct person_id) from {}.person_{}_case".format(db_cfg['@person_database_schema'], drug)
-            # print("select * from person_{}".format(drug))
-            cursor.execute(sql_query)
-            n_case_population = cursor.fetchone()[0]
-            
-            output_text = "{}, {}, {} \n".format(drug, n_total_population, n_case_population)
-            print(output_text)
-            f.write(output_text)
-        conn.commit()
-        f.close()
-except :
-    traceback.print_exc()
-    log.error(traceback.format_exc())
+# Check the number of created patients
+dict_list = []
+for drug in cfg['drug'].keys():
+    sql_query = "select count(distinct person_id) from {}.person_{}_total".format(db_cfg['@person_database_schema'], drug)
+    # print("select * from person_{}".format(drug))
+    n_total_population = executeQuerynfetchone(conn, sql_query)
+    
+    sql_query = "select count(distinct person_id) from {}.person_{}_case".format(db_cfg['@person_database_schema'], drug)
+    # print("select * from person_{}".format(drug))
+    n_case_population = executeQuerynfetchone(conn, sql_query)
+    
+    dict_list.append({'drug': drug, 'n_total_population': n_total_population, 'n_case_population': n_case_population})
+    
+pd.DataFrame(dict_list).to_csv("{}/check_numberofpatient.txt".format(output_dir), index=False)
     
 # In[]:
+# make person table from 2 cohort (1:3 sampling) 
 for file_path in cfg['translatequerysql3']:
     param_dict = cfg['translatequerysql3'][file_path]
     for drug in cfg['drug'].keys():
@@ -213,9 +227,10 @@ for file_path in cfg['translatequerysql3']:
         sql_query = readfile(sql_file_path)
         sql_query = renderTranslateQuerySql(sql_query, sql_param_dict)
         result = executeQuery(conn, sql_query)
-        writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
+        writefile(filepath=sql_file_path.replace('../_sql/','../query/{}/'.format(drug)), text=sql_query)
         
 # In[]:
+# create person_meas table for check the distribution of the patient's meas values (Not required.)
 for file_path in cfg['translatequerysql4']:
     param_dict = cfg['translatequerysql4'][file_path]
     for meas in cfg['meas'].keys():
@@ -231,8 +246,7 @@ for file_path in cfg['translatequerysql4']:
         sql_query = readfile(sql_file_path)
         sql_query = renderTranslateQuerySql(sql_query, sql_param_dict)
         result = executeQuery(conn, sql_query)
-        writefile(filepath=sql_file_path.replace('../','../query/'), text=sql_query)
-
+        writefile(filepath=sql_file_path.replace('../_sql/','../query/{}/'.format(drug)), text=sql_query)
     
 # In[ ]:
 conn.close()

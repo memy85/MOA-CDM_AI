@@ -107,21 +107,8 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         # person_df = cond_df[["person_id", "label"]].drop_duplicates()
         # print(person_df.label.value_counts())
         
-        def extract_past_data_based_on_index_date(x):
-            return x.query('cohort_start_date >= concept_date')
-            
-        def filter_with_missing_rate(x, nCaseInTotal, nControlInTotal, threshold):
-            past_data = extract_past_data_based_on_index_date(x)
-            nCaseInConceptId = len(past_data.loc[past_data['label']==1,'person_id'].unique())
-            nControlInConceptId =len(past_data.loc[past_data['label']==0,'person_id'].unique())
-            fEpsilon = 1.0e-08 # devide by zero
-            fMissingRateForCase = nCaseInConceptId / (nCaseInTotal + fEpsilon)
-            fMissingRateForControl = nControlInConceptId / (nControlInTotal + fEpsilon)
-            if (fMissingRateForCase < threshold) | (fMissingRateForControl < threshold) :
-                return pd.DataFrame(columns=past_data.columns)
-            #print("{}, {}, {}, {}, {:.2}, {}, {}, {:.2}".format(set(past_data.concept_id), set(past_data.concept_name), nCaseInConceptId, nCaseInTotal, fMissingRateForCase, nControlInConceptId, nControlInTotal, fMissingRateForControl))
-            return x
-
+        # ---------------------- check features ----------------------------
+        concept_list = []
         nCaseInTotal = len(all_domain_vars_df.loc[all_domain_vars_df['label']==1,'person_id'].unique())
         nControlInTotal =len(all_domain_vars_df.loc[all_domain_vars_df['label']==0,'person_id'].unique())
 
@@ -130,6 +117,20 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         cond_df = cond_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
         proc_df = proc_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
 
+        meas_concept_df = meas_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate_concept(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
+        drug_concept_df = drug_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate_concept(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
+        cond_concept_df = cond_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate_concept(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
+        proc_concept_df = proc_df.groupby('concept_id').apply(lambda x : filter_with_missing_rate_concept(x, nCaseInTotal, nControlInTotal, threshold=0.1)).reset_index(drop=True)
+
+        meas_concept_df['concept_domain'] = 'meas'
+        drug_concept_df['concept_domain'] = 'drug'
+        cond_concept_df['concept_domain'] = 'proc'
+        proc_concept_df['concept_domain'] = 'cond'
+        
+        all_domain_concept_df = pd.concat([meas_concept_df, drug_concept_df, cond_concept_df, proc_concept_df], axis=0, ignore_index=True)
+        all_domain_concept_df.to_csv('{}/{}_feature_2.csv'.format(output_result_dir, outcome_name), header=True, index=True)
+        # -------------------------------------------------------------------
+        
         # @variable selection
         meas_vars_df = variant_selection_paired_t_test(meas_df)
         drug_vars_df = variant_selection_mcnemar(drug_df)
