@@ -8,7 +8,7 @@
         "@port": 5432,
         "@database": "CDM",
         "@cdm_database_schema": "CDM.dbo",
-        "@person_database_schema": "temp.dbo"
+        "@person_database_schema": "temp_moa.dbo"
     },
     "postgresql": {
         "@server": "111.111.111.111",
@@ -17,7 +17,7 @@
         "@port": 5432,
         "@database": "postgres",
         "@cdm_database_schema": "CDM.dbo",
-        "@person_database_schema": "temp.dbo"
+        "@person_database_schema": "temp_moa.dbo"
     },
     "meas": {
         "AST": { "@meas_concept_id": "3013721" },
@@ -84,14 +84,14 @@
     },
     "translatequerysql0":{
         "../_sql/0_create_temp_cohort_table/create_temp_cohort_table_{dbms}.sql":{
-            "@cohort_database_schema": "temp.dbo",
+            "@cohort_database_schema": "temp_moa.dbo",
             "@cohort_table": "temp_cohort"
         }
     },
     "translatequerysql1":{
         "../_sql/1_insert_cohort_id_into_cohort_table/total/{ade}_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
-            "@target_database_schema": "temp.dbo",
+            "@target_database_schema": "temp_moa.dbo",
             "@target_cohort_table": "temp_cohort",
             "@vocabulary_database_schema": "CDM.dbo",
             "@target_cohort_id": "{drug_target_cohort_id}",
@@ -99,9 +99,9 @@
         },
         "../_sql/2_create_person_drug_table/create_table_person_drug_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
-            "@cohort_database_schema": "temp.dbo",
+            "@cohort_database_schema": "temp_moa.dbo",
             "@target_cohort_table": "temp_cohort",
-            "@target_database_schema": "temp.dbo",
+            "@target_database_schema": "temp_moa.dbo",
             "@target_person_table":"person_{drug}_total",
             "@target_cohort_id": "{drug_target_cohort_id}"
         }
@@ -109,7 +109,7 @@
     "translatequerysql2":{
         "../_sql/1_insert_cohort_id_into_cohort_table/case/{ade}_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
-            "@target_database_schema": "temp.dbo",
+            "@target_database_schema": "temp_moa.dbo",
             "@target_cohort_table": "temp_cohort",
             "@vocabulary_database_schema": "CDM.dbo",
             "@target_cohort_id": "{drug_target_cohort_id}",
@@ -117,9 +117,9 @@
         },
         "../_sql/2_create_person_drug_table/create_table_person_drug_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
-            "@cohort_database_schema": "temp.dbo",
+            "@cohort_database_schema": "temp_moa.dbo",
             "@target_cohort_table": "temp_cohort",
-            "@target_database_schema": "temp.dbo",
+            "@target_database_schema": "temp_moa.dbo",
             "@target_person_table":"person_{drug}_case",
             "@target_cohort_id": "{drug_target_cohort_id}"
         }
@@ -127,7 +127,7 @@
     "translatequerysql3":{
         "../_sql/3_make_table_from_2cohort/make_person_from_2cohort_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
-            "@target_database_schema": "temp.dbo",
+            "@target_database_schema": "temp_moa.dbo",
             "@target_person_table_total": "person_{drug}_total",
             "@target_person_table_case": "person_{drug}_case",
             "@target_person_table": "person_{drug}"
@@ -137,7 +137,7 @@
         "../_sql/4_create_person_meas_table/create_table_person_meas_{dbms}.sql":{
             "@cdm_database_schema": "CDM.dbo",
             "@target_measurement_concept_id": "{@meas_concept_id}",
-            "@target_database_schema": "temp.dbo",
+            "@target_database_schema": "temp_moa.dbo",
             "@target_person_table": "person_{meas}"
         }
     }

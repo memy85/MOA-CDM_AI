@@ -428,3 +428,42 @@ def get_matching_pairs(label1_df, label0_df, scaler=True):
     indices = indices.reshape(indices.shape[0]*5)
     matched = label0_df.iloc[indices]
     return matched
+
+def extract_past_data_based_on_index_date(x):
+    return x.query('cohort_start_date >= concept_date')
+    
+def filter_with_missing_rate(x, nCaseInTotal, nControlInTotal, threshold):
+    past_data = extract_past_data_based_on_index_date(x)
+    nCaseInConceptId = len(past_data.loc[past_data['label']==1,'person_id'].unique())
+    nControlInConceptId =len(past_data.loc[past_data['label']==0,'person_id'].unique())
+    fEpsilon = 1.0e-08 # devide by zero
+    fMissingRateForCase = nCaseInConceptId / (nCaseInTotal + fEpsilon)
+    fMissingRateForControl = nControlInConceptId / (nControlInTotal + fEpsilon)
+    if (fMissingRateForCase < threshold) | (fMissingRateForControl < threshold) :
+        return pd.DataFrame(columns=past_data.columns)
+    print("{}, {}, {}, {}, {:.2}, {}, {}, {:.2}".format(set(past_data.concept_id), set(past_data.concept_name), nCaseInConceptId, nCaseInTotal, fMissingRateForCase, nControlInConceptId, nControlInTotal, fMissingRateForControl))
+    return x
+
+def filter_with_missing_rate_concept(x, nCaseInTotal, nControlInTotal, threshold):
+    past_data = extract_past_data_based_on_index_date(x)
+    nCaseInConceptId = len(past_data.loc[past_data['label']==1,'person_id'].unique())
+    nControlInConceptId =len(past_data.loc[past_data['label']==0,'person_id'].unique())
+    fEpsilon = 1.0e-08 # devide by zero
+    fMissingRateForCase = nCaseInConceptId / (nCaseInTotal + fEpsilon)
+    fMissingRateForControl = nControlInConceptId / (nControlInTotal + fEpsilon)
+    if (fMissingRateForCase < threshold) | (fMissingRateForControl < threshold) :
+        return pd.DataFrame(columns=past_data.columns)
+    print("{}, {}, {}, {}, {:.2}, {}, {}, {:.2}".format(set(past_data.concept_id), set(past_data.concept_name), nCaseInConceptId, nCaseInTotal, fMissingRateForCase, nControlInConceptId, nControlInTotal, fMissingRateForControl))
+    
+    temp_df = pd.DataFrame(columns = ['concept_id', 'concept_name', 'nCaseInConceptId', 'nCaseInTotal', 'fMissingRateForCase', 'nControlInConceptId', 'nControlInTotal', 'fMissingRateForControl'])
+    var_temp = {}
+    var_temp['concept_id'] = set(past_data.concept_id)
+    var_temp['concept_name'] = set(past_data.concept_name)
+    var_temp['nCaseInConceptId'] = nCaseInConceptId
+    var_temp['nCaseInTotal'] = nCaseInTotal
+    var_temp['fMissingRateForCase'] = fMissingRateForCase
+    var_temp['nControlInConceptId'] = nControlInConceptId
+    var_temp['nControlInTotal'] = nControlInTotal
+    var_temp['fMissingRateForControl'] = fMissingRateForControl
+    temp_df = temp_df.append(var_temp, ignore_index=True)
+    return temp_df
