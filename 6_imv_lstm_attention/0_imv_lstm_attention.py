@@ -8,7 +8,8 @@ sys.path.append("..")
 
 import traceback
 from tqdm import tqdm
-from _utils.Auto_lstm_attention import *
+import textwrap
+from _utils.model_estimation import *
 from _utils.customlogger import customlogger as CL
 
 # In[ ]:
@@ -50,10 +51,6 @@ os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"
 for outcome_name in tqdm(cfg['drug'].keys()) :
     try :
         # In[ ]:
-        # ##### Case 1 : Split by person_id #####
-        # id_data = concat_df[['person_id', 'label']].drop_duplicates().reset_index(drop=True)
-        # x_id_data = np.array(id_data['person_id'])
-        # y_id_data = np.ar        log.debug("{}".format(outcome_name))
         ps_data_dir = pathlib.Path('{}/data/{}/preprocess_lstm/{}/'.format(parent_dir, current_date, outcome_name))
         output_dir = pathlib.Path('{}/result/{}/imv_lstm_attention/{}/'.format(parent_dir, current_date, outcome_name))
         pathlib.Path.mkdir(output_dir, mode=0o777, parents=True, exist_ok=True)
@@ -79,11 +76,14 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             new_col = X_df.columns
             print(X_data.shape, y_data.shape, len(new_col))
             return X_data, y_data, new_col
-
-        c = Auto_lstm_attention()
             
         concat_df = pd.read_csv('{}/{}.txt'.format(ps_data_dir, outcome_name), index_col=False)
 
+        # ##### Case 1 : Split by person_id #####
+        # id_data = concat_df[['person_id', 'label']].drop_duplicates().reset_index(drop=True)
+        # x_id_data = np.array(id_data['person_id'])
+        # y_id_data = np.array(id_data['label'])
+        
         # x_id_train, x_id_test, y_id_train, y_id_test = train_test_split(x_id_data, y_id_data, test_size=0.3, random_state=1, stratify=y_id_data) 
         
         # train_df = concat_df[concat_df['person_id'].isin(x_id_train)].reset_index(drop=True)
@@ -103,7 +103,9 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         #### Case 2 : Split ignore person_id #####
         concat_df = concat_df.drop(['person_id', 'unique_id', 'cohort_start_date', 'concept_date', 'first_abnormal_date'], axis=1)
 
-        X_data, y_data, cols = split_x_y_data(concat_df, OBP=7)
+        X_data, y_data, cols = split_x_y_data(concat_df, OBP=params['windowsize'])
+        cols = [textwrap.shorten(col, width=50, placeholder="...") for col in cols]
+        
         X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.3, random_state=1, stratify=y_data) 
 
         y_train = y_train.reshape(-1)
@@ -114,7 +116,7 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         X_train = X_train[:train_bound]
         y_val = y_train[train_bound:]
         y_train = y_train[:train_bound]
-        depth = 7
+        depth = params['windowsize']
 
         X_train_min, X_train_max = X_train.min(axis=0), X_train.max(axis=0)
         y_train_min, y_train_max = y_train.min(axis=0), y_train.max(axis=0)
@@ -135,7 +137,7 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
             break
 
         model = IMVFullLSTM(X_train_t.shape[2], 1, 128)
-        opt = torch.optim.Adam(model.parameters(), lr=0.01)
+        opt = torch.optim.Adam(model.parameters(), lr=params['learningrate'])
         epoch_scheduler = torch.optim.lr_scheduler.StepLR(opt, 20, gamma=0.9)
         
         epochs = params["epochs"]
@@ -228,7 +230,7 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         betas = betas[..., 0]
         alphas = alphas.transpose(1, 0)
 
-        fig, ax = plt.subplots(figsize=(20, 20))
+        fig, ax = plt.subplots(figsize=(40, 30))
         im = ax.imshow(alphas)
         ax.set_xticks(np.arange(X_train_t.shape[1]))
         ax.set_yticks(np.arange(len(cols)))
@@ -241,17 +243,27 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         ax.set_title("Importance of features and timesteps")
         #fig.tight_layout()
 
-        plt.savefig('{}/{}_importance_feature_.png'.format(output_dir, outcome_name), format='png',
+        plt.savefig('{}/{}_heatmap_.png'.format(output_dir, outcome_name), format='png',
                             dpi=300, facecolor='white', transparent=True,  bbox_inches='tight')
         plt.show()
 
-        plt.figure(figsize=(20, 20))
+        plt.figure(figsize=(10, 15))
         plt.title("Feature importance")
-        plt.bar(range(len(cols)), betas)
-        plt.xticks(ticks=range(len(cols)), labels=list(cols), rotation=90)
+        plt.barh(cols, betas)
+        plt.gca().invert_yaxis()
+        # plt.xticks(ticks=range(len(cols)), labels=list(cols), rotation=90)
 
-        plt.savefig('{}/{}_heatmap_.png'.format(output_dir, outcome_name), format='png',
+        plt.savefig('{}/{}_Feature_importance_.png'.format(output_dir, outcome_name), format='png',
                             dpi=300, facecolor='white', transparent=True,  bbox_inches='tight')
+        plt.show()
+        
+        y_true = true
+        y_pred_proba = preds
+        y_pred = np.rint(preds)
+
+        confusion_matrix_figure2(y_true, y_pred, output_dir, outcome_name)
+        ROC_AUC(y_pred_proba, y_true, output_dir, outcome_name)
+        model_performance_evaluation(y_true, y_pred, y_pred_proba, output_dir, outcome_name)
 
     except :
         traceback.print_exc()

@@ -215,8 +215,11 @@ def confusion_matrix_figure(y_test, y_pred, output_domain_path, outcome_name):
     return
 
 def confusion_matrix_figure2(y_test, y_pred, output_domain_path, outcome_name):        
+    from sklearn.metrics import confusion_matrix
+    import pandas as pd
     import seaborn as sns
     import matplotlib.pyplot as plt
+    import numpy as np
     plt.figure()
     cf = confusion_matrix(y_test, y_pred, labels=[1,0])
     cf_norm = confusion_matrix(y_test, y_pred, normalize='true', labels=[1,0])
