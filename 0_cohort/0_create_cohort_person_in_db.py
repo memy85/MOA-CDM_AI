@@ -65,7 +65,7 @@ def writefile(filepath, text):
     f.close()
     
 def readfile(filepath):
-    f = open(filepath, 'r', encoding='utf-8')
+    f = open(filepath, 'r')
     text = f.read()
     f.close()
     return text
