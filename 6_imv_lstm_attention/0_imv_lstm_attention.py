@@ -9,6 +9,7 @@ sys.path.append("..")
 import traceback
 from tqdm import tqdm
 import textwrap
+from _utils.Auto_lstm_attention import *
 from _utils.model_estimation import *
 from _utils.customlogger import customlogger as CL
 
@@ -36,6 +37,7 @@ log.debug('start {}'.format(curr_file_name))
 # In[ ]:
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from imv_lstm_model import IMVFullLSTM
 import torch
@@ -46,6 +48,44 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 # In[ ]:
 # for linux
 os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"
+
+# In[ ]:
+def get_column_index_by_name(df, col_name):
+    return df.columns.get_loc(col_name)-1
+
+def get_data(df, array, label, col_name, window_size):
+    index = get_column_index_by_name(df=df, col_name=col_name)
+    data = array[:, :, index]
+    data = np.concatenate((data, y_test.reshape(-1,1)), axis = 1)
+    data = pd.DataFrame(data)
+    
+    data = pd.melt(data, id_vars=[window_size], value_vars = np.arange(0,window_size), var_name='time', value_name='value')
+    data.rename(columns={window_size:"groups"}, inplace=True)
+    return data
+
+def plot_box(data, col_name, window_size):
+    data = data.copy()
+    plt.rcParams['figure.figsize'] = [7.00, 3.50]
+    plt.rcParams['figure.autolayout'] = True    
+    data['groups'] = data['groups'].apply(lambda x : 'case' if x ==1 else 'control')
+    
+    g = sns.boxplot(x = data['time'], y = data['value'], hue = data["groups"], showfliers=False)
+    g.set(title=col_name)
+    g.set_xticklabels([f't-{i}' for i in range(window_size, 0, -1)])
+    plt.legend(bbox_to_anchor=(1.02, 0.55), loc='upper left', borderaxespad=0, title='groups')
+    
+    import re
+    file_name = re.sub('[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…》]','', col_name)
+    print(file_name)
+    plt.savefig('{}/{}.png'.format(output_dir, file_name), format='png',
+                dpi=300, facecolor='white', transparent=True,  bbox_inches='tight')
+    plt.show()
+    pass
+
+def get_data_and_plot(df, array, label, col_name, window_size):
+    data = get_data(df, array, label, col_name, window_size)
+    plot_box(data, col_name, window_size)
+    pass
 
 # In[ ]:
 for outcome_name in tqdm(cfg['drug'].keys()) :
@@ -118,6 +158,13 @@ for outcome_name in tqdm(cfg['drug'].keys()) :
         y_train = y_train[:train_bound]
         depth = params['windowsize']
 
+        #--------------------
+        for col in concat_df.columns:
+            if (col=='age') | (col=='sex') | (col=='label'):
+                continue
+            get_data_and_plot(concat_df, X_test, y_test, col, window_size=params['windowsize'])
+        #--------------------
+        
         X_train_min, X_train_max = X_train.min(axis=0), X_train.max(axis=0)
         y_train_min, y_train_max = y_train.min(axis=0), y_train.max(axis=0)
 
