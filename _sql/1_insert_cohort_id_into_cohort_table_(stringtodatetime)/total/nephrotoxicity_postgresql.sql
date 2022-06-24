@@ -12,7 +12,7 @@ SELECT 0 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ) C UNION ALL 
 SELECT 8 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from @vocabulary_database_schema.CONCEPT where concept_id in (19103398,1150345,19103397,42374544,42374456,42952570,42952694,42952697,43256386,42952583,43288947)
+  select concept_id from @vocabulary_database_schema.CONCEPT where concept_id in (@drug_concept_set)
 
 ) I
 ) C
@@ -28,7 +28,7 @@ FROM
 (
   select E.person_id, E.start_date, E.end_date,
          row_number() OVER (PARTITION BY E.person_id ORDER BY E.sort_date ASC) ordinal,
-         to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD') as op_start_date, to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD') as op_end_date, cast(E.visit_occurrence_id as bigint) as visit_occurrence_id
+         to_timestamp(to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD'), 'YYYY-MM-DD') as op_start_date, to_timestamp(to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD'), 'YYYY-MM-DD') as op_end_date, cast(E.visit_occurrence_id as bigint) as visit_occurrence_id
   FROM 
   (
   -- Begin Drug Exposure Criteria
@@ -37,7 +37,7 @@ select C.person_id, C.drug_exposure_id as event_id, C.drug_exposure_start_date a
        C.visit_occurrence_id,C.drug_exposure_start_date as sort_date
 from 
 (
-  select de.person_id, de.drug_concept_id, de.drug_exposure_id, de.visit_occurrence_id, to_timestamp(de.drug_exposure_start_date, 'YYYY-MM-DD') as drug_exposure_start_date, to_timestamp(de.DRUG_EXPOSURE_END_DATE, 'YYYY-MM-DD') as DRUG_EXPOSURE_END_DATE, CAST (de.DAYS_SUPPLY AS INTEGER) as DAYS_SUPPLY
+  select de.person_id, de.drug_concept_id, de.drug_exposure_id, de.visit_occurrence_id, to_timestamp(de.drug_exposure_start_date, 'YYYY-MM-DD') as drug_exposure_start_date, to_timestamp(de.durg_exposure_end_date, 'YYYY-MM-DD') as durg_exposure_end_date, CAST (de.days_supply AS INTEGER) as days_supply 
   FROM @cdm_database_schema.DRUG_EXPOSURE de
 JOIN Codesets cs on (de.drug_concept_id = cs.concept_id and cs.codeset_id = 8)
 ) C
@@ -47,9 +47,9 @@ JOIN Codesets cs on (de.drug_concept_id = cs.concept_id and cs.codeset_id = 8)
 
   ) E
 	JOIN @cdm_database_schema.observation_period OP on E.person_id = OP.person_id and E.start_date >=  to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD') and E.start_date <= to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD')
-  WHERE (to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD') + 60*INTERVAL'1 day') <= E.START_DATE AND (E.START_DATE + 0*INTERVAL'1 day') <= to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD')
+  WHERE (to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD') + 30*INTERVAL'1 day') <= E.START_DATE AND (E.START_DATE + 0*INTERVAL'1 day') <= to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD')
 ) P
-WHERE P.ordinal = 1
+
 -- End Primary Events
 
 )
@@ -99,9 +99,9 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 0)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 0) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
@@ -156,9 +156,9 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 0)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 0) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
@@ -211,13 +211,13 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 0)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 0) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
-WHERE C.value_as_number > 2.4000
+WHERE C.value_as_number >= 2.4000
 -- End Measurement Criteria
 
 ) A on A.person_id = P.person_id  AND A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= (P.START_DATE + 1*INTERVAL'1 day') AND A.START_DATE <= (P.START_DATE + 60*INTERVAL'1 day') ) cc 

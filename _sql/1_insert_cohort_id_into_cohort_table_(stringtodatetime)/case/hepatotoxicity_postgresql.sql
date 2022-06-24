@@ -30,7 +30,7 @@ SELECT 6 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ) C UNION ALL 
 SELECT 10 as codeset_id, c.concept_id FROM (select distinct I.concept_id FROM
 ( 
-  select concept_id from @vocabulary_database_schema.CONCEPT where concept_id in (42377469,40989613,42921639,42919003,42658275,40237993,40238249,40238257,745466,42931710,42931715,42931727,42931726,42931742,42931743,42931750)
+  select concept_id from @vocabulary_database_schema.CONCEPT where concept_id in (@drug_concept_set)
 
 ) I
 ) C
@@ -46,7 +46,7 @@ FROM
 (
   select E.person_id, E.start_date, E.end_date,
          row_number() OVER (PARTITION BY E.person_id ORDER BY E.sort_date ASC) ordinal,
-         to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD') as op_start_date, to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD') as op_end_date, cast(E.visit_occurrence_id as bigint) as visit_occurrence_id
+         to_timestamp(to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD'), 'YYYY-MM-DD') as op_start_date, to_timestamp(to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD'), 'YYYY-MM-DD') as op_end_date, cast(E.visit_occurrence_id as bigint) as visit_occurrence_id
   FROM 
   (
   -- Begin Drug Exposure Criteria
@@ -55,7 +55,7 @@ select C.person_id, C.drug_exposure_id as event_id, C.drug_exposure_start_date a
        C.visit_occurrence_id,C.drug_exposure_start_date as sort_date
 from 
 (
-  select de.person_id, de.drug_concept_id, de.drug_exposure_id, de.visit_occurrence_id, to_timestamp(de.drug_exposure_start_date, 'YYYY-MM-DD') as drug_exposure_start_date, to_timestamp(de.DRUG_EXPOSURE_END_DATE, 'YYYY-MM-DD') as DRUG_EXPOSURE_END_DATE,  CAST (de.DAYS_SUPPLY AS INTEGER) as DAYS_SUPPLY
+  select de.person_id, de.drug_concept_id, de.drug_exposure_id, de.visit_occurrence_id, to_timestamp(de.drug_exposure_start_date, 'YYYY-MM-DD') as drug_exposure_start_date, to_timestamp(de.durg_exposure_end_date, 'YYYY-MM-DD') as durg_exposure_end_date, CAST (de.days_supply AS INTEGER) as days_supply 
   FROM @cdm_database_schema.DRUG_EXPOSURE de
 JOIN Codesets cs on (de.drug_concept_id = cs.concept_id and cs.codeset_id = 10)
 ) C
@@ -65,9 +65,9 @@ JOIN Codesets cs on (de.drug_concept_id = cs.concept_id and cs.codeset_id = 10)
 
   ) E
 	JOIN @cdm_database_schema.observation_period OP on E.person_id = OP.person_id and E.start_date >=  to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD') and E.start_date <= to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD')
-  WHERE (to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD') + 60*INTERVAL'1 day') <= E.START_DATE AND (E.START_DATE + 0*INTERVAL'1 day') <= to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD')
+  WHERE (to_timestamp(OP.observation_period_start_date, 'YYYY-MM-DD') + 30*INTERVAL'1 day') <= E.START_DATE AND (E.START_DATE + 0*INTERVAL'1 day') <= to_timestamp(OP.observation_period_end_date, 'YYYY-MM-DD')
 ) P
-WHERE P.ordinal = 1
+
 -- End Primary Events
 
 )
@@ -117,9 +117,9 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 3)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 3) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
@@ -142,9 +142,9 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 4)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 4) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
@@ -167,9 +167,9 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 5)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 5) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
@@ -192,9 +192,9 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 6)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 6) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
@@ -249,9 +249,9 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 3)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 3) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
@@ -276,9 +276,9 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 4)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 4) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
@@ -303,12 +303,11 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 6)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 6) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
-
 
 WHERE (C.value_as_number / NULLIF(C.range_high, 0)) > 1.0000
 -- End Measurement Criteria
@@ -331,9 +330,9 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 5)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 5) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
@@ -374,7 +373,7 @@ FROM
 (
   select E.person_id, E.event_id 
   FROM qualified_events E
-  LEFT JOIN
+  INNER JOIN
   (
     -- Begin Correlated Criteria
 select 0 as index_id, cc.person_id, cc.event_id
@@ -386,13 +385,13 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 3)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 4) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
-WHERE (C.value_as_number / NULLIF(C.range_high, 0)) > 3.0000
+WHERE (C.value_as_number / NULLIF(C.range_high, 0)) >= 5.0000
 -- End Measurement Criteria
 
 ) A on A.person_id = P.person_id  AND A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= (P.START_DATE + 1*INTERVAL'1 day') AND A.START_DATE <= (P.START_DATE + 60*INTERVAL'1 day') ) cc 
@@ -411,13 +410,46 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 4)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 6) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
-WHERE (C.value_as_number / NULLIF(C.range_high, 0)) > 3.0000
+WHERE (C.value_as_number / NULLIF(C.range_high, 0)) >= 2.0000
+-- End Measurement Criteria
+
+) A on A.person_id = P.person_id  AND A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= (P.START_DATE + 1*INTERVAL'1 day') AND A.START_DATE <= (P.START_DATE + 60*INTERVAL'1 day') ) cc 
+GROUP BY cc.person_id, cc.event_id
+HAVING COUNT(cc.event_id) >= 1
+-- End Correlated Criteria
+
+UNION ALL
+-- Begin Criteria Group
+select 2 as index_id, person_id, event_id
+FROM
+(
+  select E.person_id, E.event_id 
+  FROM qualified_events E
+  INNER JOIN
+  (
+    -- Begin Correlated Criteria
+select 0 as index_id, cc.person_id, cc.event_id
+from (SELECT p.person_id, p.event_id 
+FROM qualified_events P
+JOIN (
+  -- Begin Measurement Criteria
+select C.person_id, C.measurement_id as event_id, C.measurement_date as start_date, (C.measurement_date + 1*INTERVAL'1 day') as END_DATE,
+       C.visit_occurrence_id, C.measurement_date as sort_date
+from 
+(
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
+  FROM @cdm_database_schema.MEASUREMENT m
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 4) 
+WHERE LENGTH(m.value_as_number) > 0
+) C
+
+WHERE (C.value_as_number / NULLIF(C.range_high, 0)) >= 3.0000
 -- End Measurement Criteria
 
 ) A on A.person_id = P.person_id  AND A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= (P.START_DATE + 1*INTERVAL'1 day') AND A.START_DATE <= (P.START_DATE + 60*INTERVAL'1 day') ) cc 
@@ -427,7 +459,7 @@ HAVING COUNT(cc.event_id) >= 1
 
 UNION ALL
 -- Begin Correlated Criteria
-select 2 as index_id, cc.person_id, cc.event_id
+select 1 as index_id, cc.person_id, cc.event_id
 from (SELECT p.person_id, p.event_id 
 FROM qualified_events P
 JOIN (
@@ -436,88 +468,13 @@ select C.person_id, C.measurement_id as event_id, C.measurement_date as start_da
        C.visit_occurrence_id, C.measurement_date as sort_date
 from 
 (
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
+  select m.person_id, m.measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number, m.range_low, m.range_high
   FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 6)
+JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 5) 
 WHERE LENGTH(m.value_as_number) > 0
 ) C
 
 WHERE (C.value_as_number / NULLIF(C.range_high, 0)) > 2.0000
--- End Measurement Criteria
-
-) A on A.person_id = P.person_id  AND A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= (P.START_DATE + 1*INTERVAL'1 day') AND A.START_DATE <= (P.START_DATE + 60*INTERVAL'1 day') ) cc 
-GROUP BY cc.person_id, cc.event_id
-HAVING COUNT(cc.event_id) >= 1
--- End Correlated Criteria
-
-UNION ALL
--- Begin Correlated Criteria
-select 3 as index_id, cc.person_id, cc.event_id
-from (SELECT p.person_id, p.event_id 
-FROM qualified_events P
-JOIN (
-  -- Begin Measurement Criteria
-select C.person_id, C.measurement_id as event_id, C.measurement_date as start_date, (C.measurement_date + 1*INTERVAL'1 day') as END_DATE,
-       C.visit_occurrence_id, C.measurement_date as sort_date
-from 
-(
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high 
-  FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 5)
-WHERE LENGTH(m.value_as_number) > 0
-) C
-
-WHERE (C.value_as_number / NULLIF(C.range_high, 0)) > 2.0000
--- End Measurement Criteria
-
-) A on A.person_id = P.person_id  AND A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= (P.START_DATE + 1*INTERVAL'1 day') AND A.START_DATE <= (P.START_DATE + 60*INTERVAL'1 day') ) cc 
-GROUP BY cc.person_id, cc.event_id
-HAVING COUNT(cc.event_id) >= 1
--- End Correlated Criteria
-
-UNION ALL
--- Begin Correlated Criteria
-select 4 as index_id, cc.person_id, cc.event_id
-from (SELECT p.person_id, p.event_id 
-FROM qualified_events P
-JOIN (
-  -- Begin Measurement Criteria
-select C.person_id, C.measurement_id as event_id, C.measurement_date as start_date, (C.measurement_date + 1*INTERVAL'1 day') as END_DATE,
-       C.visit_occurrence_id, C.measurement_date as sort_date
-from 
-(
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
-  FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 3)
-WHERE LENGTH(m.value_as_number) > 0
-) C
-
-WHERE C.value_as_number > 200.0000
--- End Measurement Criteria
-
-) A on A.person_id = P.person_id  AND A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= (P.START_DATE + 1*INTERVAL'1 day') AND A.START_DATE <= (P.START_DATE + 60*INTERVAL'1 day') ) cc 
-GROUP BY cc.person_id, cc.event_id
-HAVING COUNT(cc.event_id) >= 1
--- End Correlated Criteria
-
-UNION ALL
--- Begin Correlated Criteria
-select 5 as index_id, cc.person_id, cc.event_id
-from (SELECT p.person_id, p.event_id 
-FROM qualified_events P
-JOIN (
-  -- Begin Measurement Criteria
-select C.person_id, C.measurement_id as event_id, C.measurement_date as start_date, (C.measurement_date + 1*INTERVAL'1 day') as END_DATE,
-       C.visit_occurrence_id, C.measurement_date as sort_date
-from 
-(
-  select m.person_id, m. measurement_id, m.measurement_concept_id, m.visit_occurrence_id, to_timestamp(m.measurement_date, 'YYYY-MM-DD') as measurement_date, CAST(m.value_as_number AS FLOAT) AS value_as_number , m.range_low, m.range_high
-  FROM @cdm_database_schema.MEASUREMENT m
-JOIN Codesets cs on (m.measurement_concept_id = cs.concept_id and cs.codeset_id = 4)
-WHERE LENGTH(m.value_as_number) > 0
-) C
-
-WHERE C.value_as_number > 200.0000
 -- End Measurement Criteria
 
 ) A on A.person_id = P.person_id  AND A.START_DATE >= P.OP_START_DATE AND A.START_DATE <= P.OP_END_DATE AND A.START_DATE >= (P.START_DATE + 1*INTERVAL'1 day') AND A.START_DATE <= (P.START_DATE + 60*INTERVAL'1 day') ) cc 
@@ -527,7 +484,13 @@ HAVING COUNT(cc.event_id) >= 1
 
   ) CQ on E.person_id = CQ.person_id and E.event_id = CQ.event_id
   GROUP BY E.person_id, E.event_id
-  HAVING COUNT(index_id) >= 0
+  HAVING COUNT(index_id) = 2
+) G
+-- End Criteria Group
+
+  ) CQ on E.person_id = CQ.person_id and E.event_id = CQ.event_id
+  GROUP BY E.person_id, E.event_id
+  HAVING COUNT(index_id) >= 1
 ) G
 -- End Criteria Group
 ) AC on AC.person_id = pe.person_id AND AC.event_id = pe.event_id
